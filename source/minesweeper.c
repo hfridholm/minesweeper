@@ -12,6 +12,11 @@ int main(int argc, char* argv[])
 {
   info_print("Start of main");
 
+  screen_t* screen = screen_create(800, 600, "Minesweeper");
+
+  sleep(5);
+
+  screen_destroy(&screen);
 
   info_print("End of main");
 

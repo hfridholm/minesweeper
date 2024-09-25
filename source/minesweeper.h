@@ -1,6 +1,4 @@
 /*
- * minesweeper.h
- *
  * Written by Hampus Fridholm
  *
  * Last updated: 2024-09-22
@@ -10,5 +8,7 @@
 #define MINESWEEPER_H
 
 #include "debug.h"
+#include "screen.h"
+#include "assets.h"
 
 #endif // MINESWEEPER_H
