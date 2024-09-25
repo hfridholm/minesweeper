@@ -9,7 +9,7 @@
 /*
  * Create SDL Window
  */
-static SDL_Window* sdl_window_create(int width, int height, const char* title)
+static SDL_Window* sdl_window_create(int width, int height, char* title)
 {
   info_print("Creating SDL Window");
 
@@ -83,19 +83,54 @@ static void sdl_renderer_destroy(SDL_Renderer** renderer)
 }
 
 /*
+ *
+ */
+int screen_menu_add(screen_t* screen, menu_t* menu)
+{
+  if(!screen || !menu)
+  {
+    error_print("Bad input");
+    
+    return 1;
+  }
+
+  info_print("Adding menu: %s", menu->name);
+
+  screen->menus = realloc(screen->menus, sizeof(menu_t*) * (screen->menu_count + 1));
+
+  if(!screen->menus)
+  {
+    error_print("Failed to allocate added menu");
+
+    return 2;
+  }
+
+  screen->menus[screen->menu_count++] = menu;
+
+  info_print("Added menu: %s", menu->name);
+
+  return 0;
+}
+
+/*
  * Create screen
  */
-screen_t* screen_create(int width, int height, const char* title)
+screen_t* screen_create(int width, int height, char* title)
 {
-  info_print("Creating screen");
+  info_print("Creating screen: %s", title);
 
   screen_t* screen = malloc(sizeof(screen_t));
+
+  screen->title = title;
 
   screen->window = sdl_window_create(width, height, title);
 
   screen->renderer = sdl_renderer_create(screen->window);
 
-  info_print("Created screen");
+  screen->menus      = NULL;
+  screen->menu_count = 0;
+
+  info_print("Created screen: %s", title);
 
   return screen;
 }
@@ -107,15 +142,22 @@ void screen_destroy(screen_t** screen)
 {
   if(!screen || !(*screen)) return;
 
-  info_print("Destroying screen");
+  info_print("Destroying screen: %s", (*screen)->title);
 
   sdl_window_destroy(&(*screen)->window);
 
   sdl_renderer_destroy(&(*screen)->renderer);
 
+  for(int index = 0; index < (*screen)->menu_count; index++)
+  {
+    menu_destroy(&(*screen)->menus[index]);
+  }
+
+  free((*screen)->menus);
+
+  info_print("Destroyed screen: %s", (*screen)->title);
+
   free(*screen);
 
   *screen = NULL;
-
-  info_print("Destroyed screen");
 }

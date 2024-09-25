@@ -7,6 +7,8 @@
 #ifndef MINESWEEPER_H
 #define MINESWEEPER_H
 
+#include <stdbool.h>
+
 #include "debug.h"
 #include "screen.h"
 #include "assets.h"

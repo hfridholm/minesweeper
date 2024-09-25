@@ -53,7 +53,7 @@ typedef int menu_event_t(menu_t*, int);
 typedef struct menu_t
 {
   char*         name;
-  window_t*     windows;
+  window_t**    windows;
   int           window_count;
   menu_event_t* event;
   screen_t*     screen;       // Reference back to screen
@@ -64,19 +64,23 @@ extern menu_t* menu_create();
 
 extern void    menu_destroy(menu_t** menu);
 
+extern int     menu_window_add(menu_t* menu, window_t* window);
 /*
  *
  */
 typedef struct screen_t
 {
+  char*         title;
   SDL_Window*   window;    // The physical window
   SDL_Renderer* renderer;
   menu_t**      menus;
   int           menu_count;
 } screen_t;
 
-extern screen_t* screen_create(int width, int height, const char* title);
+extern screen_t* screen_create(int width, int height, char* title);
 
 extern void      screen_destroy(screen_t** screen);
+
+extern int       screen_menu_add(screen_t* screen, menu_t* menu);
 
 #endif // SCREEN_H
