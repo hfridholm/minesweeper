@@ -4,8 +4,8 @@
  * Last updated: 2024-09-23
  */
 
-#ifndef S_SCREEN_INTERN_H
-#define S_SCREEN_INTERN_H
+#ifndef S_INTERN_H
+#define S_INTERN_H
 
 #include "../screen.h"
 
@@ -17,4 +17,4 @@ extern SDL_Renderer* window_renderer_get(window_t* window);
 
 extern int texture_render(SDL_Renderer* renderer, SDL_Texture* texture, SDL_Rect* srcrect, SDL_Rect* dstrect);
 
-#endif // S_SCREEN_INTERN_H
+#endif // S_INTERN_H

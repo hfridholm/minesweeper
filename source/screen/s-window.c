@@ -6,7 +6,7 @@
 
 #include "../screen.h"
 
-#include "s-screen-intern.h"
+#include "s-intern.h"
 
 /*
  *

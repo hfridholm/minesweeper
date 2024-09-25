@@ -60,15 +60,17 @@ typedef struct menu_t
 } menu_t;
 
 
-extern menu_t* menu_create(char* name);
+extern menu_t*   menu_create(char* name);
 
-extern void    menu_destroy(menu_t** menu);
+extern void      menu_destroy(menu_t** menu);
 
-extern int     menu_window_add(menu_t* menu, window_t* window);
+extern int       menu_window_add(menu_t* menu, window_t* window);
 
-extern int     menu_texture_render(menu_t* menu, SDL_Texture* texture, SDL_Rect* rect);
+extern int       menu_texture_render(menu_t* menu, SDL_Texture* texture, SDL_Rect* rect);
 
-extern int     menu_render(menu_t* menu);
+extern int       menu_render(menu_t* menu);
+
+extern window_t* menu_window_get(menu_t* menu, const char* name);
 
 /*
  *
@@ -90,5 +92,7 @@ extern void      screen_destroy(screen_t** screen);
 extern int       screen_menu_add(screen_t* screen, menu_t* menu);
 
 extern int       screen_render(screen_t* screen);
+
+extern menu_t*   screen_menu_get(screen_t* screen, const char* name);
 
 #endif // SCREEN_H

@@ -12,7 +12,7 @@ HELP_TARGET  := help
 DELETE_CMD := rm
 
 COMPILER      := gcc
-COMPILE_FLAGS := -Wall -Werror -g -Og -std=gnu99 -oFast
+COMPILE_FLAGS := -Werror -g -Og -std=gnu99 -oFast
 
 LINKER_FLAGS  := -lm `sdl2-config --libs --cflags` -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
 

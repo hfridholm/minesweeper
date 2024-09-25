@@ -11,11 +11,52 @@
 /*
  *
  */
-void game_routine(screen_t* screen)
+void menu_field_render(screen_t* screen, assets_t* assets)
+{
+  menu_t* field_menu = screen_menu_get(screen, "field");
+
+  if(!field_menu)
+  {
+    error_print("Field menu doesn't exist");
+
+    return;
+  }
+
+  menu_texture_render(field_menu, assets->field.textures.background, NULL);
+
+  window_t* field_window = menu_window_get(field_menu, "field");
+
+  if(!field_window)
+  {
+    error_print("Field window diesn't exist");
+
+    return;
+  }
+
+  window_texture_render(field_window, assets->field.textures.mine, NULL);
+}
+
+/*
+ *
+ */
+void game_render(screen_t* screen, assets_t* assets)
+{
+  if(strcmp(screen->menu_name, "field") == 0)
+  {
+    menu_field_render(screen, assets);
+  }
+
+  screen_render(screen);
+}
+
+/*
+ *
+ */
+void game_routine(screen_t* screen, assets_t* assets)
 {
   info_print("Start game routine");
 
-  screen_render(screen);
+  game_render(screen, assets);
 
   bool running = true;
 
@@ -28,7 +69,7 @@ void game_routine(screen_t* screen)
       running = false;
     }
 
-    screen_render(screen);
+    game_render(screen, assets);
   }
 
   info_print("Stop game routine");
@@ -42,6 +83,8 @@ int main(int argc, char* argv[])
   info_print("Start of main");
 
   screen_t* screen = screen_create(800, 600, "Minesweeper");
+
+  assets_t* assets = assets_create(screen->renderer);
 
 
   int width, height;
@@ -64,15 +107,10 @@ int main(int argc, char* argv[])
   screen->menu_name = menu->name;
 
 
-  SDL_Texture* texture = texture_load(screen->renderer, "../assets/textures/background-field.png");
-
-  window_texture_render(window, texture, NULL);
-
-  texture_destroy(&texture);
+  game_routine(screen, assets);
 
 
-  game_routine(screen);
-
+  assets_destroy(&assets);
 
   screen_destroy(&screen);
 

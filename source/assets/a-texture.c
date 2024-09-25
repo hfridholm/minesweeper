@@ -6,6 +6,8 @@
 
 #include "../assets.h"
 
+#include "a-intern.h"
+
 /*
  * Load texture
  */

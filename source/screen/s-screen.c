@@ -6,7 +6,7 @@
 
 #include "../screen.h"
 
-#include "s-screen-intern.h"
+#include "s-intern.h"
 
 /*
  * Create SDL Window
@@ -54,7 +54,7 @@ static SDL_Renderer* sdl_renderer_create(SDL_Window* window)
 {
   info_print("Creating SDL Renderer");
 
-  SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+  SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
 
   if(!renderer)
   {
@@ -82,6 +82,28 @@ static void sdl_renderer_destroy(SDL_Renderer** renderer)
   info_print("Destroyed SDL Renderer");
 
   *renderer = NULL;
+}
+
+/*
+ *
+ */
+menu_t* screen_menu_get(screen_t* screen, const char* name)
+{
+  if(!screen)
+  {
+    error_print("Bad input");
+
+    return NULL;
+  }
+
+  for(int index = 0; index < screen->menu_count; index++)
+  {
+    menu_t* menu = screen->menus[index];
+
+    if(menu && strcmp(menu->name, name) == 0) return menu;
+  }
+
+  return NULL;
 }
 
 /*

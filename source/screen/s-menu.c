@@ -6,7 +6,29 @@
 
 #include "../screen.h"
 
-#include "s-screen-intern.h"
+#include "s-intern.h"
+
+/*
+ *
+ */
+window_t* menu_window_get(menu_t* menu, const char* name)
+{
+  if(!menu)
+  {
+    error_print("Bad input");
+    
+    return NULL;
+  }
+
+  for(int index = 0; index < menu->window_count; index++)
+  {
+    window_t* window = menu->windows[index];
+
+    if(window && strcmp(window->name, name) == 0) return window;
+  }
+
+  return NULL;
+}
 
 /*
  *

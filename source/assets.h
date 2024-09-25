@@ -28,7 +28,7 @@ typedef struct assets_field_chunks_t
 /*
  *
  */
-typedef struct assets_field_surfaces_t
+typedef struct assets_field_textures_t
 {
   SDL_Texture* background;
   SDL_Texture* digits[8];
@@ -37,7 +37,7 @@ typedef struct assets_field_surfaces_t
   SDL_Texture* intact;
   SDL_Texture* swept;
   SDL_Texture* flag;
-} assets_field_surfaces_t;
+} assets_field_textures_t;
 
 /*
  *
@@ -45,7 +45,7 @@ typedef struct assets_field_surfaces_t
 typedef struct assets_field_t
 {
   assets_field_chunks_t   chunks;
-  assets_field_surfaces_t surfaces;
+  assets_field_textures_t textures;
 } assets_field_t;
 
 /*
@@ -78,6 +78,10 @@ typedef struct assets_t
   assets_banners_t banners;
   assets_field_t   field;
 } assets_t;
+
+extern assets_t* assets_create(SDL_Renderer* renderer);
+
+extern void      assets_destroy(assets_t** assets);
 
 extern SDL_Texture* texture_load(SDL_Renderer* renderer, const char* path);
 
