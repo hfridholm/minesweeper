@@ -6,6 +6,8 @@
 
 #include "../screen.h"
 
+#include "s-screen-intern.h"
+
 /*
  *
  */
@@ -20,6 +22,7 @@ int menu_window_add(menu_t* menu, window_t* window)
 
   info_print("Adding window: %s", window->name);
 
+  // 1. Add window to menu
   menu->windows = realloc(menu->windows, sizeof(window_t*) * (menu->window_count + 1));
 
   if(!menu->windows)
@@ -31,7 +34,85 @@ int menu_window_add(menu_t* menu, window_t* window)
 
   menu->windows[menu->window_count++] = window;
 
+  // 2. Add references to window
+  window->menu = menu;
+
   info_print("Added window: %s", window->name);
+
+  return 0;
+}
+
+/*
+ *
+ */
+SDL_Renderer* menu_renderer_get(menu_t* menu)
+{
+  if(!menu)
+  {
+    error_print("Bad input");
+
+    return NULL;
+  }
+
+  return screen_renderer_get(menu->screen);
+}
+
+/*
+ *
+ */
+int menu_texture_render(menu_t* menu, SDL_Texture* texture, SDL_Rect* rect)
+{
+  if(!menu || !texture)
+  {
+    error_print("Bad input");
+
+    return 1;
+  }
+
+  SDL_Renderer* renderer = menu_renderer_get(menu);
+
+  if(!renderer)
+  {
+    error_print("Failed to get renderer from menu %s", menu->name);
+    
+    return 2;
+  }
+
+  SDL_SetRenderTarget(renderer, menu->texture);
+
+  texture_render(renderer, texture, NULL, rect);
+
+  SDL_SetRenderTarget(renderer, NULL);
+
+  return 0;
+}
+
+/*
+ *
+ */
+int menu_render(menu_t* menu)
+{
+  if(!menu)
+  {
+    error_print("Bad input");
+
+    return 1;
+  }
+
+  SDL_Renderer* renderer = menu_renderer_get(menu);
+
+  if(!renderer)
+  {
+    error_print("Failed to get renderer from menu %s", menu->name);
+    
+    return 2;
+  }
+
+  SDL_SetRenderTarget(renderer, menu->texture);
+
+  // ...
+
+  SDL_SetRenderTarget(renderer, NULL);
 
   return 0;
 }
@@ -49,6 +130,8 @@ menu_t* menu_create(char* name)
 
   menu->windows      = NULL;
   menu->window_count = 0;
+
+  menu->screen = NULL;
 
   info_print("Created menu: %s", name);
 

@@ -6,14 +6,16 @@
 
 #include "../screen.h"
 
+#include "s-screen-intern.h"
+
 /*
  * Create SDL Window
  */
-static SDL_Window* sdl_window_create(int width, int height, char* title)
+static SDL_Window* sdl_window_create(int width, int height, char* name)
 {
   info_print("Creating SDL Window");
 
-  SDL_Window* window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
+  SDL_Window* window = SDL_CreateWindow(name, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
 
   if(!window)
   {
@@ -96,6 +98,7 @@ int screen_menu_add(screen_t* screen, menu_t* menu)
 
   info_print("Adding menu: %s", menu->name);
 
+  // 1. Add menu to screen
   screen->menus = realloc(screen->menus, sizeof(menu_t*) * (screen->menu_count + 1));
 
   if(!screen->menus)
@@ -107,7 +110,57 @@ int screen_menu_add(screen_t* screen, menu_t* menu)
 
   screen->menus[screen->menu_count++] = menu;
 
+  // 2. Add references to menu
+  menu->screen = screen;
+
   info_print("Added menu: %s", menu->name);
+
+  return 0;
+}
+
+/*
+ *
+ */
+SDL_Renderer* screen_renderer_get(screen_t* screen)
+{
+  if(!screen)
+  {
+    error_print("Bad input");
+
+    return NULL;
+  }
+
+  return screen->renderer;
+}
+
+/*
+ *
+ */
+int screen_render(screen_t* screen)
+{
+  if(!screen)
+  {
+    error_print("Bad input");
+
+    return 1;
+  }
+
+  SDL_Renderer* renderer = screen_renderer_get(screen);
+
+  if(!renderer)
+  {
+    error_print("Failed to get renderer from screen: %s", screen->name);
+
+    return 2;
+  }
+
+  SDL_SetRenderTarget(renderer, NULL);
+
+  // SDL_RenderClear(renderer);
+
+  // ...
+
+  SDL_RenderPresent(renderer);
 
   return 0;
 }
@@ -115,22 +168,22 @@ int screen_menu_add(screen_t* screen, menu_t* menu)
 /*
  * Create screen
  */
-screen_t* screen_create(int width, int height, char* title)
+screen_t* screen_create(int width, int height, char* name)
 {
-  info_print("Creating screen: %s", title);
+  info_print("Creating screen: %s", name);
 
   screen_t* screen = malloc(sizeof(screen_t));
 
-  screen->title = title;
+  screen->name = name;
 
-  screen->window = sdl_window_create(width, height, title);
+  screen->window = sdl_window_create(width, height, name);
 
   screen->renderer = sdl_renderer_create(screen->window);
 
   screen->menus      = NULL;
   screen->menu_count = 0;
 
-  info_print("Created screen: %s", title);
+  info_print("Created screen: %s", name);
 
   return screen;
 }
@@ -142,7 +195,7 @@ void screen_destroy(screen_t** screen)
 {
   if(!screen || !(*screen)) return;
 
-  info_print("Destroying screen: %s", (*screen)->title);
+  info_print("Destroying screen: %s", (*screen)->name);
 
   sdl_window_destroy(&(*screen)->window);
 
@@ -155,7 +208,7 @@ void screen_destroy(screen_t** screen)
 
   free((*screen)->menus);
 
-  info_print("Destroyed screen: %s", (*screen)->title);
+  info_print("Destroyed screen: %s", (*screen)->name);
 
   free(*screen);
 
