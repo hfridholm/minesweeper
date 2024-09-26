@@ -45,6 +45,8 @@ static square_t* event_square_get(window_t* window, field_t* field, SDL_Event* e
   int windex = x * field->width  / window->rect.w;
   int hindex = y * field->height / window->rect.h;
 
+  info_print("windex: %d hindex: %d", windex, hindex);
+
   return &field->squares[windex][hindex];
 }
 
@@ -64,9 +66,9 @@ static void event_mouse_down_left_handler(window_t* window, assets_t* assets, fi
     return;
   }
 
-  square->state = STATE_SWEPT;
+  square_sweep(field, square);
 
-  info_print("Swept square");
+  info_print("Swept square: (%d %d)", square->windex, square->hindex);
 }
 
 /*

@@ -15,6 +15,9 @@ static int assets_field_chunks_init(assets_field_chunks_t* chunks)
 {
   info_print("Initializing assets field chunks");
 
+  chunks->swept   = chunk_load("../assets/sounds/square-swept.wav");
+  chunks->flagged = chunk_load("../assets/sounds/square-flagged.wav");
+
   info_print("Initialized assets field chunks");
 
   return 0;
@@ -89,11 +92,26 @@ static void assets_field_textures_destroy(assets_field_textures_t* textures)
 /*
  *
  */
+static void assets_field_chunks_free(assets_field_chunks_t* chunks)
+{
+  info_print("Freeing assets field chunks");
+  
+  chunk_free(&chunks->flagged);
+  chunk_free(&chunks->swept);
+
+  info_print("Freed assets field chunks");
+}
+
+/*
+ *
+ */
 void assets_field_destroy(assets_field_t* field)
 {
   info_print("Destroying assets field");
 
   assets_field_textures_destroy(&field->textures);
+
+  assets_field_chunks_free(&field->chunks);
 
   info_print("Destroyed assets field");
 }

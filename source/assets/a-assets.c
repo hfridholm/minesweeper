@@ -19,8 +19,9 @@ assets_t* assets_create(SDL_Renderer* renderer)
   memset(assets, 0, sizeof(assets_t));
 
   assets_field_init(renderer,   &assets->field);
-
   assets_banners_init(renderer, &assets->banners);
+
+  // assets->font = font_load("../assets/fonts/font.ttf", 24);
 
   info_print("Created assets");
 
@@ -35,8 +36,9 @@ void assets_destroy(assets_t** assets)
   info_print("Destroying assets");
 
   assets_field_destroy(&(*assets)->field);
-
   assets_banners_destroy(&(*assets)->banners);
+
+  // font_close(&(*assets)->font);
 
   free(*assets);
 

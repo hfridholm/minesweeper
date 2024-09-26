@@ -11,13 +11,13 @@
 /*
  * Load texture
  */
-SDL_Texture* texture_load(SDL_Renderer* renderer, const char* path)
+SDL_Texture* texture_load(SDL_Renderer* renderer, const char* file)
 {
-  SDL_Surface* surface = IMG_Load(path);
+  SDL_Surface* surface = IMG_Load(file);
   
   if(!surface)
   {
-    error_print("Failed to load image at: %s", path);
+    error_print("Failed to load image at: %s", file);
     error_print("IMG_Load: %s", IMG_GetError());
 
     return NULL;

@@ -23,10 +23,11 @@ void game_routine(screen_t* screen, assets_t* assets, field_t* field)
   game_render(screen, assets, field);
 
   bool running = true;
+  field->state = GAME_ACTIVE;
 
   SDL_Event event;
 
-  while(running)
+  while(running && field->state == GAME_ACTIVE)
   {
     while(SDL_PollEvent(&event))
     {
@@ -44,6 +45,13 @@ void game_routine(screen_t* screen, assets_t* assets, field_t* field)
 
       last_ticks = start_ticks;
     }
+  }
+
+  game_render(screen, assets, field);
+
+  while(SDL_WaitEvent(&event))
+  {
+    if(event.type == SDL_QUIT) break;
   }
 
   info_print("Stop game routine");

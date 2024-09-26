@@ -83,8 +83,4 @@ extern assets_t* assets_create(SDL_Renderer* renderer);
 
 extern void      assets_destroy(assets_t** assets);
 
-extern SDL_Texture* texture_load(SDL_Renderer* renderer, const char* path);
-
-extern void         texture_destroy(SDL_Texture** texture);
-
 #endif // ASSETS_H

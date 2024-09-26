@@ -9,6 +9,9 @@
 
 #include "../minesweeper.h"
 
+extern SDL_Rect square_rect_get(window_t* window, field_t* field, int windex, int hindex);
+
+
 extern void menu_field_event_handler(menu_t* menu, assets_t* assets, field_t* field, SDL_Event* event);
 
 extern void menu_field_window_field_event_handler(window_t* window, assets_t* assets, field_t* field, SDL_Event* event);

@@ -188,18 +188,75 @@ int screen_render(screen_t* screen)
 }
 
 /*
+ *
+ */
+static int sdl_drivers_init(void)
+{
+  info_print("Initializing SDL drivers");
+
+  if(SDL_Init(SDL_INIT_VIDEO) != 0)
+  {
+    error_print("Failed to initialize SDL");
+
+    return 1;
+  }
+
+  if(IMG_Init(IMG_INIT_PNG) == 0)
+  {
+    SDL_Quit();
+
+    error_print("Failed to initialize IMG");
+
+    return 2;
+  }
+
+  if(TTF_Init() == -1)
+  {
+    SDL_Quit();
+    IMG_Quit();
+
+    error_print("Failed to initialize TTF");
+
+    return 3;
+  }
+
+  if(Mix_Init(0) != 0)
+  {
+    SDL_Quit();
+    IMG_Quit();
+    TTF_Quit();
+
+    error_print("Failed to initialize Mix");
+
+    return 4;
+  }
+
+  Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024);
+
+  info_print("Initialized SDL drivers");
+
+  return 0;
+}
+
+/*
  * Create screen
  */
 screen_t* screen_create(int width, int height, char* name)
 {
   info_print("Creating screen: %s", name);
 
+  if(sdl_drivers_init() != 0)
+  {
+    error_print("Failed to initialize SDL drivers");
+
+    return NULL;
+  }
+
   screen_t* screen = malloc(sizeof(screen_t));
 
   screen->name = name;
 
-  screen->window = sdl_window_create(width, height, name);
-
+  screen->window   = sdl_window_create(width, height, name);
   screen->renderer = sdl_renderer_create(screen->window);
 
   screen->menus      = NULL;
