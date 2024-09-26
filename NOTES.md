@@ -1,5 +1,4 @@
 # Notes
-- create screen structure (menus, windows)
 - create minefield structure ("field")
 - write minefield create functions
 - write screen render functions

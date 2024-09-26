@@ -8,68 +8,42 @@
 
 #include "minesweeper.h"
 
-/*
- *
- */
-void menu_field_render(screen_t* screen, assets_t* assets)
-{
-  menu_t* field_menu = screen_menu_get(screen, "field");
-
-  if(!field_menu)
-  {
-    error_print("Field menu doesn't exist");
-
-    return;
-  }
-
-  menu_texture_render(field_menu, assets->field.textures.background, NULL);
-
-  window_t* field_window = menu_window_get(field_menu, "field");
-
-  if(!field_window)
-  {
-    error_print("Field window diesn't exist");
-
-    return;
-  }
-
-  window_texture_render(field_window, assets->field.textures.mine, NULL);
-}
+#define FPS 10
 
 /*
  *
  */
-void game_render(screen_t* screen, assets_t* assets)
-{
-  if(strcmp(screen->menu_name, "field") == 0)
-  {
-    menu_field_render(screen, assets);
-  }
-
-  screen_render(screen);
-}
-
-/*
- *
- */
-void game_routine(screen_t* screen, assets_t* assets)
+void game_routine(screen_t* screen, assets_t* assets, field_t* field)
 {
   info_print("Start game routine");
 
-  game_render(screen, assets);
+  Uint32 start_ticks, last_ticks;
+
+
+  game_render(screen, assets, field);
 
   bool running = true;
 
   SDL_Event event;
 
-  while(running && SDL_WaitEvent(&event))
+  while(running)
   {
-    if(event.type == SDL_QUIT)
+    while(SDL_PollEvent(&event))
     {
-      running = false;
+      if(event.type == SDL_QUIT) running = false;
+
+      event_handler(screen, assets, field, &event);
     }
 
-    game_render(screen, assets);
+    start_ticks = SDL_GetTicks();
+
+    // Only render the screen number of FPS
+    if(start_ticks - last_ticks >= 1000 / FPS)
+    {
+      game_render(screen, assets, field);
+
+      last_ticks = start_ticks;
+    }
   }
 
   info_print("Stop game routine");
@@ -81,6 +55,8 @@ void game_routine(screen_t* screen, assets_t* assets)
 int main(int argc, char* argv[])
 {
   info_print("Start of main");
+
+  field_t* field = field_create(8, 6, 10, 5);
 
   screen_t* screen = screen_create(800, 600, "Minesweeper");
 
@@ -107,12 +83,14 @@ int main(int argc, char* argv[])
   screen->menu_name = menu->name;
 
 
-  game_routine(screen, assets);
+  game_routine(screen, assets, field);
 
 
   assets_destroy(&assets);
 
   screen_destroy(&screen);
+
+  field_free(&field);
 
   info_print("End of main");
 
