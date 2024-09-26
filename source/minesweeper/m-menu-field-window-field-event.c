@@ -66,7 +66,10 @@ static void event_mouse_down_left_handler(window_t* window, assets_t* assets, fi
     return;
   }
 
-  square_sweep(field, square);
+  if(square_sweep(field, square) == 0 && !square->mine)
+  {
+    chunk_play(assets->field.chunks.swept);
+  }
 
   info_print("Swept square: (%d %d)", square->windex, square->hindex);
 }
@@ -77,6 +80,20 @@ static void event_mouse_down_left_handler(window_t* window, assets_t* assets, fi
 static void event_mouse_down_right_handler(window_t* window, assets_t* assets, field_t* field, SDL_Event* event)
 {
   info_print("Minefield mouse down right");
+
+  square_t* square = event_square_get(window, field, event);
+
+  if(!square)
+  {
+    error_print("No square was clicked in minefield");
+
+    return;
+  }
+
+  if(square_flag(square) != 0)
+  {
+    chunk_play(assets->field.chunks.flagged);
+  }
 }
 
 /*

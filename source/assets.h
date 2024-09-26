@@ -83,4 +83,10 @@ extern assets_t* assets_create(SDL_Renderer* renderer);
 
 extern void      assets_destroy(assets_t** assets);
 
+extern SDL_Color COLOR_WHITE;
+extern SDL_Color COLOR_GREEN;
+extern SDL_Color COLOR_RED;
+
+extern SDL_Texture* text_texture_create(SDL_Renderer* renderer, const char* text, TTF_Font* font, SDL_Color color);
+
 #endif // ASSETS_H

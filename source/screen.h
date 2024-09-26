@@ -96,10 +96,6 @@ extern int       screen_render(screen_t* screen);
 extern menu_t*   screen_menu_get(screen_t* screen, const char* name);
 
 
-extern SDL_Color COLOR_WHITE;
-extern SDL_Color COLOR_GREEN;
-extern SDL_Color COLOR_RED;
-
-extern SDL_Texture* text_texture_create(SDL_Renderer* renderer, const char* text, TTF_Font* font, SDL_Color color);
+extern int chunk_play(Mix_Chunk* chunk);
 
 #endif // SCREEN_H

@@ -48,7 +48,10 @@ typedef struct field_t
   field_state_t state;
 } field_t;
 
-extern void     square_sweep(field_t* field, square_t* square);
+extern int square_sweep(field_t* field, square_t* square);
+
+extern int square_flag(square_t* square);
+
 
 extern field_t* field_create(int width, int height, int mine_amount, int max_flags);
 

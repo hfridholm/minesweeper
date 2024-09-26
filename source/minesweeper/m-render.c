@@ -50,6 +50,8 @@ static void square_render(window_t* window, assets_t* assets, square_t square, S
       break;
 
     case STATE_FLAGGED:
+      window_texture_render(window, textures->intact, &rect);
+
       window_texture_render(window, textures->flag, &rect);
       break;
 
