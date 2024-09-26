@@ -47,6 +47,8 @@ void game_routine(screen_t* screen, assets_t* assets, field_t* field)
     }
   }
 
+  mines_reveal(field);
+
   game_render(screen, assets, field);
 
   while(SDL_WaitEvent(&event))

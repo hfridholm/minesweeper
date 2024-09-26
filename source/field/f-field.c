@@ -9,6 +9,25 @@
 /*
  *
  */
+void mines_reveal(field_t* field)
+{
+  for(int windex = 0; windex < field->width; windex++)
+  {
+    for(int hindex = 0; hindex < field->height; hindex++)
+    {
+      square_t* square = &field->squares[windex][hindex];
+
+      if(square->mine && square->state == STATE_INTACT)
+      {
+        square->state = STATE_SWEPT;
+      }
+    }
+  }
+}
+
+/*
+ *
+ */
 static void index_remove(int* indexes, int count, int target)
 {
   for(int index = target; index < (count - 1); index++)
@@ -48,7 +67,8 @@ static int mines_place(field_t* field, int mine_amount)
 
     square_t* square = &field->squares[windex][hindex];
 
-    square->mine = true;
+    square->mine     = true;
+    square->exploded = false;
 
     index_remove(indexes, square_count, square_index);
   }
@@ -87,7 +107,12 @@ static void mines_mark(field_t* field)
   {
     for(int hindex = 0; hindex < field->height; hindex++)
     {
-      square_mines_mark(field, windex, hindex);
+      square_t* square = &field->squares[windex][hindex];
+
+      if(!square->mine)
+      {
+        square_mines_mark(field, windex, hindex);
+      }
     }
   }
 }

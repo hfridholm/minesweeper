@@ -27,8 +27,8 @@ typedef struct square_t
   bool           mine;   // Mine is on square
   union
   {
-    int exploded; // Mine has exploded
-    int amount;   // Amount of adjacent mines
+    bool exploded; // Mine has exploded
+    int  amount;   // Amount of adjacent mines
   };
 } square_t;
 
@@ -51,6 +51,9 @@ typedef struct field_t
 extern int square_sweep(field_t* field, square_t* square);
 
 extern int square_flag(square_t* square);
+
+
+extern void mines_reveal(field_t* field);
 
 
 extern field_t* field_create(int width, int height, int mine_amount, int max_flags);
