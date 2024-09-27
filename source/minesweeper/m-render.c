@@ -105,7 +105,12 @@ void game_won_render(menu_t* menu, assets_t* assets, field_t* field)
 {
   SDL_Texture* texture = text_texture_create(menu->screen->renderer, "Won!", assets->font, COLOR_GREEN);
 
-  menu_texture_render(menu, texture, NULL);
+  window_t* window = menu_window_get(menu, "result");
+
+  if(window)
+  {
+    window_texture_render(window, texture, NULL);
+  }
 
   chunk_play(assets->chunks.won);
 
@@ -119,7 +124,12 @@ void game_lost_render(menu_t* menu, assets_t* assets, field_t* field)
 {
   SDL_Texture* texture = text_texture_create(menu->screen->renderer, "Lost!", assets->font, COLOR_RED);
 
-  menu_texture_render(menu, texture, NULL);
+  window_t* window = menu_window_get(menu, "result");
+
+  if(window)
+  {
+    window_texture_render(window, texture, NULL);
+  }
 
   chunk_play(assets->chunks.lost);
 

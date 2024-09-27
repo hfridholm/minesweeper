@@ -18,6 +18,10 @@ extern SDL_Renderer* window_renderer_get(window_t* window);
 
 extern int render_target_set(SDL_Renderer* renderer, SDL_Texture* target);
 
+extern int render_target_clear(SDL_Renderer* renderer, SDL_Texture* target);
+
+extern int render_target_texture_render(SDL_Renderer* renderer, SDL_Texture* target, SDL_Texture* texture, SDL_Rect* srcrect, SDL_Rect* dstrect);
+
 
 extern int window_render(window_t* window);
 

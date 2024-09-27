@@ -143,7 +143,8 @@ int screen_menu_add(screen_t* screen, menu_t* menu)
 }
 
 /*
- *
+ * This function is not necessary, but,
+ * it adds to the abstraction and modularity
  */
 SDL_Renderer* screen_renderer_get(screen_t* screen)
 {
@@ -158,7 +159,36 @@ SDL_Renderer* screen_renderer_get(screen_t* screen)
 }
 
 /*
+ * Render a texture directly to the screen, in the background
  *
+ * The menu's texture will be rendered over this texture
+ */
+int screen_texture_render(screen_t* screen, SDL_Texture* texture, SDL_Rect* rect)
+{
+  if(!screen || !texture)
+  {
+    error_print("Bad input");
+
+    return 1;
+  }
+
+  SDL_Renderer* renderer = screen_renderer_get(screen);
+
+  if(!renderer)
+  {
+    error_print("Failed to get renderer from screen %s", screen->name);
+    
+    return 2;
+  }
+
+  render_target_texture_render(renderer, NULL, texture, NULL, rect);
+
+  return 0;
+}
+
+/*
+ * Render the screen with the current menu
+ * and all of the menu's windows and child windows
  */
 int screen_render(screen_t* screen)
 {
@@ -178,10 +208,10 @@ int screen_render(screen_t* screen)
     return 2;
   }
 
-  render_target_set(renderer, NULL);
+  // Clear the screen
+  render_target_clear(renderer, NULL);
 
-  SDL_RenderClear(renderer);
-
+  // Create the rendered menu texture
   menu_t* menu = screen_menu_get(screen, screen->menu_name);
 
   menu_render(menu);
@@ -192,7 +222,11 @@ int screen_render(screen_t* screen)
     .h = screen->height
   };
 
-  texture_render(screen->renderer, menu->texture, NULL, &rect);
+  // Render the menu texture to the screen
+  render_target_texture_render(renderer, NULL, menu->texture, NULL, &rect);
+
+  // Clear the menu texture
+  render_target_clear(renderer, menu->texture);
 
   SDL_RenderPresent(renderer);
 
@@ -207,17 +241,18 @@ screen_t* screen_create(int width, int height, char* name)
   info_print("Creating screen: %s", name);
 
   screen_t* screen = malloc(sizeof(screen_t));
+  memset(screen, 0, sizeof(screen_t));
 
-  screen->name = name;
-
+  // 1. Creating sdl window and renderer
   screen->window   = sdl_window_create(width, height, name);
+
   screen->renderer = sdl_renderer_create(screen->window);
+
+  // 2. Assigning screen values
+  screen->name = name;
 
   screen->width  = width;
   screen->height = height;
-
-  screen->menus      = NULL;
-  screen->menu_count = 0;
 
   info_print("Created screen: %s", name);
 
@@ -233,16 +268,18 @@ void screen_destroy(screen_t** screen)
 
   info_print("Destroying screen: %s", (*screen)->name);
 
-  sdl_renderer_destroy(&(*screen)->renderer);
-
-  sdl_window_destroy(&(*screen)->window);
-
+  // 1. Destroying menus
   for(int index = 0; index < (*screen)->menu_count; index++)
   {
     menu_destroy(&(*screen)->menus[index]);
   }
 
   free((*screen)->menus);
+
+  // 2. Destroying sdl renderer and window
+  sdl_renderer_destroy(&(*screen)->renderer);
+
+  sdl_window_destroy(&(*screen)->window);
 
   info_print("Destroyed screen: %s", (*screen)->name);
 

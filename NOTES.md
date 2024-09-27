@@ -1,12 +1,4 @@
 # Notes
-- create minefield structure ("field")
-- write minefield create functions
-- write screen render functions
-- complete minefield game
-- write screen input functions
-- done!
-
-## Structs
-- screen_t | Screen
-- assets_t | Loaded Textures and Sounds
-- field_t  | Minefield
+- check return values of functions, so that the function fails if some part fails.
+- remove as many checks as possible and set EXPECTs (expectations of function parameters)
+- add error_messages everywhere, where an error can occour

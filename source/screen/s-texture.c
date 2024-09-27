@@ -59,6 +59,15 @@ SDL_Texture* texture_create(SDL_Renderer* renderer, int width, int height)
     return NULL;
   }
 
+  if(SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND) != 0)
+  {
+    error_print("SDL_SetTextureBlendMode: %s", SDL_GetError());
+
+    texture_destroy(&texture);
+
+    return NULL;
+  }
+
   info_print("Created texture");
 
   return texture;
@@ -79,6 +88,56 @@ int render_target_set(SDL_Renderer* renderer, SDL_Texture* target)
   }
 
   return 0;
+}
+
+/*
+ * Clear the supplied texture
+ *
+ * This function should set a temporary new target, clear, and set back the old target
+ */
+int render_target_clear(SDL_Renderer* renderer, SDL_Texture* target)
+{
+  SDL_Texture* old_target = SDL_GetRenderTarget(renderer);
+
+  // 1. Temporarly set the new target
+  if(render_target_set(renderer, target) != 0)
+  {
+    return 1;
+  }
+
+  SDL_RenderClear(renderer);
+
+  // 2. Change back to the old target
+  if(render_target_set(renderer, old_target) != 0)
+  {
+    return 2;
+  }
+
+  return 0;
+}
+
+/*
+ * Render texture to target texture
+ */
+int render_target_texture_render(SDL_Renderer* renderer, SDL_Texture* target, SDL_Texture* texture, SDL_Rect* srcrect, SDL_Rect* dstrect)
+{
+  SDL_Texture* old_target = SDL_GetRenderTarget(renderer);
+
+  // 1. Temporarly set the new target
+  if(render_target_set(renderer, target) != 0)
+  {
+    return 1;
+  }
+
+  int status = texture_render(renderer, texture, srcrect, dstrect);
+
+  // 2. Change back to the old target
+  if(render_target_set(renderer, old_target) != 0)
+  {
+    return 2;
+  }
+
+  return (status == 0) ? 0 : 3;
 }
 
 /*

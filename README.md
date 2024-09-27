@@ -14,3 +14,15 @@ That prevents the pointer from being used wrongly.
 Efficiency: Passing large structures by value can be inefficient because it involves copying the entire structure. By passing pointers, you avoid this overhead and simply pass the memory address.
 
 Consistency: Many SDL functions and APIs use pointers for structures, so using pointers can make your code more consistent with the SDL library’s conventions.
+
+
+## Rendering
+
+You can render textures to the screen and menu directly, which will put them in the background. You can also render textures to windows. Depending on the structure of the windows and the window order, the textures will be rendered upon each other based on the hiarchy.
+
+Both screen, menu and window have textures, which is local canvases that everything under in the hiarchy gets rendered to. For example, all of the menu windows's textures will be rendered to the menus texture when the screen is rendered.
+
+## Structs
+- screen_t | Screen
+- assets_t | Loaded Textures and Sounds
+- field_t  | Minefield

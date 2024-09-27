@@ -8,7 +8,7 @@
 
 #include "minesweeper.h"
 
-#define FPS 10
+#define FPS 1
 
 /*
  *
@@ -107,9 +107,9 @@ int main(int argc, char* argv[])
   screen->menu_name = menu->name;
 
 
-  // menu_window_add(menu, window_create("result", (SDL_Rect) {0, 0, width, height}));
-
   menu_window_add(menu, window_create("field", (SDL_Rect) {0, 0, width, height}));
+
+  menu_window_add(menu, window_create("result", (SDL_Rect) {0, 0, width, height}));
 
 
   game_routine(screen, assets, field);

@@ -26,7 +26,7 @@ typedef struct menu_t   menu_t;
 typedef struct screen_t screen_t;
 
 /*
- *
+ * Either the window has a parent window, or a menu, not both
  */
 typedef struct window_t
 {
@@ -67,8 +67,6 @@ extern void      menu_destroy(menu_t** menu);
 extern int       menu_window_add(menu_t* menu, window_t* window);
 
 extern int       menu_texture_render(menu_t* menu, SDL_Texture* texture, SDL_Rect* rect);
-
-extern int       menu_render(menu_t* menu);
 
 extern window_t* menu_window_get(menu_t* menu, const char* name);
 

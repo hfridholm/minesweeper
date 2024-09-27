@@ -65,7 +65,9 @@ SDL_Renderer* window_renderer_get(window_t* window)
 }
 
 /*
+ * Render texture to window
  *
+ * The textures of child windows will be rendered over this texture
  */
 int window_texture_render(window_t* window, SDL_Texture* texture, SDL_Rect* rect)
 {
@@ -85,17 +87,13 @@ int window_texture_render(window_t* window, SDL_Texture* texture, SDL_Rect* rect
     return 2;
   }
 
-  render_target_set(renderer, window->texture);
-
-  texture_render(renderer, texture, NULL, rect);
-
-  render_target_set(renderer, NULL);
+  render_target_texture_render(renderer, window->texture, texture, NULL, rect);
 
   return 0;
 }
 
 /*
- *
+ * Render window with all of it's child windows
  */
 int window_render(window_t* window)
 {
@@ -115,18 +113,16 @@ int window_render(window_t* window)
     return 2;
   }
 
-  render_target_set(renderer, window->texture);
-
   for(int index = 0; index < window->child_count; index++)
   {
     window_t* child = window->children[index];
 
     window_render(child);
 
-    window_texture_render(window, child->texture, &child->rect);
-  }
+    render_target_texture_render(renderer, window->texture, child->texture, NULL, &child->rect);
 
-  render_target_set(renderer, NULL);
+    render_target_clear(renderer, child->texture);
+  }
 
   return 0;
 }
@@ -139,17 +135,10 @@ window_t* window_create(char* name, SDL_Rect rect)
   info_print("Creating window: %s", name);
 
   window_t* window = malloc(sizeof(window_t));
+  memset(window, 0, sizeof(window_t));
 
   window->name = name;
   window->rect = rect;
-
-  window->texture = NULL;
-
-  window->children    = NULL;
-  window->child_count = 0;
-
-  window->menu = NULL;
-  window->parent = NULL;
 
   info_print("Created window: %s", name);
 

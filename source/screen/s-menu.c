@@ -82,7 +82,9 @@ SDL_Renderer* menu_renderer_get(menu_t* menu)
 }
 
 /*
+ * Render a texture directly to the menu, in the background
  *
+ * The textures of windows will be rendered over this texture
  */
 int menu_texture_render(menu_t* menu, SDL_Texture* texture, SDL_Rect* rect)
 {
@@ -102,16 +104,16 @@ int menu_texture_render(menu_t* menu, SDL_Texture* texture, SDL_Rect* rect)
     return 2;
   }
 
-  render_target_set(renderer, menu->texture);
-
-  texture_render(renderer, texture, NULL, rect);
-
-  render_target_set(renderer, NULL);
+  render_target_texture_render(renderer, menu->texture, texture, NULL, rect);
 
   return 0;
 }
 
 /*
+ * Render menu with all of it's windows and child windows
+ *
+ * Clear the textures of the windows that are rendered
+ *
  * The for-loop decides which order to render the windows
  */
 int menu_render(menu_t* menu)
@@ -132,18 +134,16 @@ int menu_render(menu_t* menu)
     return 2;
   }
 
-  render_target_set(renderer, menu->texture);
-
   for(int index = 0; index < menu->window_count; index++)
   {
     window_t* window = menu->windows[index];
 
     window_render(window);
 
-    menu_texture_render(menu, window->texture, &window->rect);
-  }
+    render_target_texture_render(renderer, menu->texture, window->texture, NULL, &window->rect);
 
-  render_target_set(renderer, NULL);
+    render_target_clear(renderer, window->texture);
+  }
 
   return 0;
 }
@@ -158,15 +158,9 @@ menu_t* menu_create(char* name)
   info_print("Creating menu: %s", name);
 
   menu_t* menu = malloc(sizeof(menu_t));
+  memset(menu, 0, sizeof(menu_t));
 
   menu->name = name;
-
-  menu->windows      = NULL;
-  menu->window_count = 0;
-
-  menu->screen = NULL;
-
-  menu->texture = NULL;
 
   info_print("Created menu: %s", name);
 
