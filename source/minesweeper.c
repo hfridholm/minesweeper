@@ -19,41 +19,58 @@ void game_routine(screen_t* screen, assets_t* assets, field_t* field)
 
   Uint32 start_ticks, last_ticks;
 
-
-  game_render(screen, assets, field);
-
   bool running = true;
-  field->state = GAME_ACTIVE;
 
   SDL_Event event;
 
-  while(running && field->state == GAME_ACTIVE)
-  {
-    while(SDL_PollEvent(&event))
-    {
-      if(event.type == SDL_QUIT) running = false;
-
-      event_handler(screen, assets, field, &event);
-    }
-
-    start_ticks = SDL_GetTicks();
-
-    // Only render the screen number of FPS
-    if(start_ticks - last_ticks >= 1000 / FPS)
-    {
-      game_render(screen, assets, field);
-
-      last_ticks = start_ticks;
-    }
-  }
-
-  mines_reveal(field);
-
   game_render(screen, assets, field);
 
-  while(SDL_WaitEvent(&event))
+  while(running)
   {
-    if(event.type == SDL_QUIT) break;
+    while(running && field->state == GAME_ACTIVE)
+    {
+      while(SDL_PollEvent(&event))
+      {
+        if(event.type == SDL_QUIT)
+        {
+          running = false;
+
+          break;
+        }
+
+        event_handler(screen, assets, field, &event);
+      }
+
+      start_ticks = SDL_GetTicks();
+
+      // Only render the screen number of FPS
+      if(start_ticks - last_ticks >= 1000 / FPS)
+      {
+        game_render(screen, assets, field);
+
+        last_ticks = start_ticks;
+      }
+    }
+
+    if(running)
+    {
+      if(field->state == GAME_LOST)
+      {
+        mines_reveal(field);
+      }
+
+      game_render(screen, assets, field);
+
+      while(SDL_WaitEvent(&event))
+      {
+        if(event.type == SDL_QUIT)
+        {
+          running = false;
+
+          break;
+        }
+      }
+    }
   }
 
   info_print("Stop game routine");
@@ -66,6 +83,13 @@ int main(int argc, char* argv[])
 {
   info_print("Start of main");
 
+  if(sdl_drivers_init() != 0)
+  {
+    sdl_drivers_quit();
+
+    return 1;
+  }
+
   field_t* field = field_create(8, 6, 10, 5);
 
   screen_t* screen = screen_create(800, 600, "Minesweeper");
@@ -76,21 +100,16 @@ int main(int argc, char* argv[])
   int width, height;
   SDL_GetWindowSize(screen->window, &width, &height);
 
-  menu_t*   menu   = menu_create("field");
-
-  window_t* window = window_create("field", (SDL_Rect) {0, 0, width, height});
-
-  SDL_Rect child_rect = {(float) width / 4, (float) height / 4, (float) width / 2, (float) height / 2};
-
-  window_t* child  = window_create("child", child_rect);
-
-  window_child_add(window, child);
-
-  menu_window_add(menu, window);
+  menu_t* menu = menu_create("field");
 
   screen_menu_add(screen, menu);
 
   screen->menu_name = menu->name;
+
+
+  // menu_window_add(menu, window_create("result", (SDL_Rect) {0, 0, width, height}));
+
+  menu_window_add(menu, window_create("field", (SDL_Rect) {0, 0, width, height}));
 
 
   game_routine(screen, assets, field);
@@ -101,6 +120,8 @@ int main(int argc, char* argv[])
   screen_destroy(&screen);
 
   field_free(&field);
+
+  sdl_drivers_quit();
 
   info_print("End of main");
 

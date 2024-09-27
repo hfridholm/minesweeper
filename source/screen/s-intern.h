@@ -15,6 +15,12 @@ extern SDL_Renderer* menu_renderer_get(menu_t* menu);
 
 extern SDL_Renderer* window_renderer_get(window_t* window);
 
-extern int texture_render(SDL_Renderer* renderer, SDL_Texture* texture, SDL_Rect* srcrect, SDL_Rect* dstrect);
+
+extern int render_target_set(SDL_Renderer* renderer, SDL_Texture* target);
+
+
+extern int window_render(window_t* window);
+
+extern int menu_render(menu_t* menu);
 
 #endif // S_INTERN_H

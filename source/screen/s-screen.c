@@ -135,6 +135,8 @@ int screen_menu_add(screen_t* screen, menu_t* menu)
   // 2. Add references to menu
   menu->screen = screen;
 
+  menu->texture = texture_create(screen->renderer, screen->width, screen->height);
+
   info_print("Added menu: %s", menu->name);
 
   return 0;
@@ -176,64 +178,23 @@ int screen_render(screen_t* screen)
     return 2;
   }
 
-  SDL_SetRenderTarget(renderer, NULL);
+  render_target_set(renderer, NULL);
 
-  // SDL_RenderClear(renderer);
+  SDL_RenderClear(renderer);
 
-  // ...
+  menu_t* menu = screen_menu_get(screen, screen->menu_name);
+
+  menu_render(menu);
+
+  SDL_Rect rect =
+  {
+    .w = screen->width,
+    .h = screen->height
+  };
+
+  texture_render(screen->renderer, menu->texture, NULL, &rect);
 
   SDL_RenderPresent(renderer);
-
-  return 0;
-}
-
-/*
- *
- */
-static int sdl_drivers_init(void)
-{
-  info_print("Initializing SDL drivers");
-
-  if(SDL_Init(SDL_INIT_VIDEO) != 0)
-  {
-    error_print("Failed to initialize SDL");
-
-    return 1;
-  }
-
-  if(IMG_Init(IMG_INIT_PNG) == 0)
-  {
-    SDL_Quit();
-
-    error_print("Failed to initialize IMG");
-
-    return 2;
-  }
-
-  if(TTF_Init() == -1)
-  {
-    SDL_Quit();
-    IMG_Quit();
-
-    error_print("Failed to initialize TTF");
-
-    return 3;
-  }
-
-  if(Mix_Init(0) != 0)
-  {
-    SDL_Quit();
-    IMG_Quit();
-    TTF_Quit();
-
-    error_print("Failed to initialize Mix");
-
-    return 4;
-  }
-
-  Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024);
-
-  info_print("Initialized SDL drivers");
 
   return 0;
 }
@@ -245,19 +206,15 @@ screen_t* screen_create(int width, int height, char* name)
 {
   info_print("Creating screen: %s", name);
 
-  if(sdl_drivers_init() != 0)
-  {
-    error_print("Failed to initialize SDL drivers");
-
-    return NULL;
-  }
-
   screen_t* screen = malloc(sizeof(screen_t));
 
   screen->name = name;
 
   screen->window   = sdl_window_create(width, height, name);
   screen->renderer = sdl_renderer_create(screen->window);
+
+  screen->width  = width;
+  screen->height = height;
 
   screen->menus      = NULL;
   screen->menu_count = 0;
@@ -276,9 +233,9 @@ void screen_destroy(screen_t** screen)
 
   info_print("Destroying screen: %s", (*screen)->name);
 
-  sdl_window_destroy(&(*screen)->window);
-
   sdl_renderer_destroy(&(*screen)->renderer);
+
+  sdl_window_destroy(&(*screen)->window);
 
   for(int index = 0; index < (*screen)->menu_count; index++)
   {

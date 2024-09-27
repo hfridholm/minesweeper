@@ -78,6 +78,8 @@ void event_window_handler(screen_t* screen, assets_t* assets, field_t* field, SD
  */
 void event_handler(screen_t* screen, assets_t* assets, field_t* field, SDL_Event* event)
 {
+  if(!event) return;
+
   switch(event->type)
   {
     case SDL_KEYDOWN:

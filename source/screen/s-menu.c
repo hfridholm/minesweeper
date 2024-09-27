@@ -59,6 +59,8 @@ int menu_window_add(menu_t* menu, window_t* window)
   // 2. Add references to window
   window->menu = menu;
 
+  window->texture = texture_create(menu->screen->renderer, window->rect.w, window->rect.h);
+
   info_print("Added window: %s", window->name);
 
   return 0;
@@ -100,17 +102,17 @@ int menu_texture_render(menu_t* menu, SDL_Texture* texture, SDL_Rect* rect)
     return 2;
   }
 
-  SDL_SetRenderTarget(renderer, menu->texture);
+  render_target_set(renderer, menu->texture);
 
   texture_render(renderer, texture, NULL, rect);
 
-  SDL_SetRenderTarget(renderer, NULL);
+  render_target_set(renderer, NULL);
 
   return 0;
 }
 
 /*
- *
+ * The for-loop decides which order to render the windows
  */
 int menu_render(menu_t* menu)
 {
@@ -130,17 +132,26 @@ int menu_render(menu_t* menu)
     return 2;
   }
 
-  SDL_SetRenderTarget(renderer, menu->texture);
+  render_target_set(renderer, menu->texture);
 
-  // ...
+  for(int index = 0; index < menu->window_count; index++)
+  {
+    window_t* window = menu->windows[index];
 
-  SDL_SetRenderTarget(renderer, NULL);
+    window_render(window);
+
+    menu_texture_render(menu, window->texture, &window->rect);
+  }
+
+  render_target_set(renderer, NULL);
 
   return 0;
 }
 
 /*
  * Create menu
+ *
+ * Maybe: Add menu directly to screen
  */
 menu_t* menu_create(char* name)
 {
@@ -154,6 +165,8 @@ menu_t* menu_create(char* name)
   menu->window_count = 0;
 
   menu->screen = NULL;
+
+  menu->texture = NULL;
 
   info_print("Created menu: %s", name);
 
@@ -175,6 +188,8 @@ void menu_destroy(menu_t** menu)
   }
 
   free((*menu)->windows);
+
+  texture_destroy(&(*menu)->texture);
 
   info_print("Destroyed menu: %s", (*menu)->name);
 

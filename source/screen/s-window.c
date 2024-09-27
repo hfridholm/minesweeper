@@ -85,11 +85,48 @@ int window_texture_render(window_t* window, SDL_Texture* texture, SDL_Rect* rect
     return 2;
   }
 
-  SDL_SetRenderTarget(renderer, window->texture);
+  render_target_set(renderer, window->texture);
 
   texture_render(renderer, texture, NULL, rect);
 
-  SDL_SetRenderTarget(renderer, NULL);
+  render_target_set(renderer, NULL);
+
+  return 0;
+}
+
+/*
+ *
+ */
+int window_render(window_t* window)
+{
+  if(!window)
+  {
+    error_print("Bad input");
+
+    return 1;
+  }
+
+  SDL_Renderer* renderer = window_renderer_get(window);
+
+  if(!renderer)
+  {
+    error_print("Failed to get renderer from window %s", window->name);
+    
+    return 2;
+  }
+
+  render_target_set(renderer, window->texture);
+
+  for(int index = 0; index < window->child_count; index++)
+  {
+    window_t* child = window->children[index];
+
+    window_render(child);
+
+    window_texture_render(window, child->texture, &child->rect);
+  }
+
+  render_target_set(renderer, NULL);
 
   return 0;
 }
@@ -105,6 +142,8 @@ window_t* window_create(char* name, SDL_Rect rect)
 
   window->name = name;
   window->rect = rect;
+
+  window->texture = NULL;
 
   window->children    = NULL;
   window->child_count = 0;
@@ -132,6 +171,8 @@ void window_destroy(window_t** window)
   }
 
   free((*window)->children);
+
+  texture_destroy(&(*window)->texture);
 
   info_print("Destroyed window: %s", (*window)->name);
 

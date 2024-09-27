@@ -130,6 +130,8 @@ field_t* field_create(int width, int height, int mine_amount, int max_flags)
   field->height    = height;
   field->max_flags = max_flags;
 
+  field->state = GAME_ACTIVE;
+
   field->squares = malloc(sizeof(square_t*) * width);
 
   for(int windex = 0; windex < width; windex++)

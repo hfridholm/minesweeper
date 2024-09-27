@@ -4,9 +4,9 @@
  * Last updated: 2024-09-23
  */
 
-#include "../assets.h"
+#include "../screen.h"
 
-#include "a-intern.h"
+#include "s-intern.h"
 
 /*
  *

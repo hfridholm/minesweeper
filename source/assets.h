@@ -9,12 +9,8 @@
 #ifndef ASSETS_H
 #define ASSETS_H
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_mixer.h>
-#include <SDL2/SDL_ttf.h>
-
 #include "debug.h"
+#include "screen.h"
 
 /*
  *
@@ -82,11 +78,5 @@ typedef struct assets_t
 extern assets_t* assets_create(SDL_Renderer* renderer);
 
 extern void      assets_destroy(assets_t** assets);
-
-extern SDL_Color COLOR_WHITE;
-extern SDL_Color COLOR_GREEN;
-extern SDL_Color COLOR_RED;
-
-extern SDL_Texture* text_texture_create(SDL_Renderer* renderer, const char* text, TTF_Font* font, SDL_Color color);
 
 #endif // ASSETS_H

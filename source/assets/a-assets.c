@@ -49,7 +49,7 @@ assets_t* assets_create(SDL_Renderer* renderer)
 
   assets_chunks_init(&assets->chunks);
 
-  // assets->font = font_load("../assets/fonts/font.ttf", 24);
+  assets->font = font_load("../assets/fonts/font.ttf", 24);
 
   info_print("Created assets");
 
@@ -68,7 +68,7 @@ void assets_destroy(assets_t** assets)
 
   assets_chunks_free(&(*assets)->chunks);
 
-  // font_close(&(*assets)->font);
+  font_close(&(*assets)->font);
 
   free(*assets);
 

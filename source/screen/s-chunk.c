@@ -9,19 +9,21 @@
 #include "s-intern.h"
 
 /*
- * Render texture
+ * Load chunk
  */
-int texture_render(SDL_Renderer* renderer, SDL_Texture* texture, SDL_Rect* srcrect, SDL_Rect* dstrect)
+Mix_Chunk* chunk_load(const char* file)
 {
-  int status = SDL_RenderCopy(renderer, texture, srcrect, dstrect);
+  Mix_Chunk* chunk = Mix_LoadWAV(file);
 
-  if(status != 0)
+  if(!chunk)
   {
-    error_print("Failed to render texture");
-    error_print("SDL_RenderCopy: %s", SDL_GetError());
+    error_print("Failed to load chunk at: %s", file);
+    error_print("Mix_LoadWAV: %s", Mix_GetError());
+
+    return NULL;
   }
 
-  return status;
+  return chunk;
 }
 
 /*
@@ -38,4 +40,16 @@ int chunk_play(Mix_Chunk* chunk)
   }
 
   return status;
+}
+
+/*
+ * Free chunk
+ */
+void chunk_free(Mix_Chunk** chunk)
+{
+  if(*chunk == NULL) return;
+
+  Mix_FreeChunk(*chunk);
+
+  *chunk = NULL;
 }

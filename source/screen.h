@@ -80,6 +80,8 @@ typedef struct screen_t
   char*         name;
   SDL_Window*   window;    // The physical window
   SDL_Renderer* renderer;
+  int           width;
+  int           height;
   menu_t**      menus;
   int           menu_count;
   char*         menu_name;
@@ -95,7 +97,44 @@ extern int       screen_render(screen_t* screen);
 
 extern menu_t*   screen_menu_get(screen_t* screen, const char* name);
 
+/*
+ *
+ */
+extern SDL_Texture* texture_load(SDL_Renderer* renderer, const char* file);
 
-extern int chunk_play(Mix_Chunk* chunk);
+extern SDL_Texture* texture_create(SDL_Renderer* renderer, int width, int height);
+
+extern int          texture_render(SDL_Renderer* renderer, SDL_Texture* texture, SDL_Rect* srcrect, SDL_Rect* dstrect);
+
+extern void         texture_destroy(SDL_Texture** texture);
+
+/*
+ *
+ */
+extern Mix_Chunk* chunk_load(const char* file);
+
+extern int        chunk_play(Mix_Chunk* chunk);
+
+extern void       chunk_free(Mix_Chunk** chunk);
+
+/*
+ *
+ */
+extern SDL_Color COLOR_WHITE;
+extern SDL_Color COLOR_GREEN;
+extern SDL_Color COLOR_RED;
+
+extern TTF_Font*    font_load(const char* file, int size);
+
+extern SDL_Texture* text_texture_create(SDL_Renderer* renderer, const char* text, TTF_Font* font, SDL_Color color);
+
+extern void         font_close(TTF_Font** font);
+
+/*
+ *
+ */
+extern int  sdl_drivers_init(void);
+
+extern void sdl_drivers_quit(void);
 
 #endif // SCREEN_H
