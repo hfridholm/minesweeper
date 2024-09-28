@@ -65,6 +65,32 @@ SDL_Renderer* window_renderer_get(window_t* window)
 }
 
 /*
+ * Render text in window
+ */
+int window_text_render(window_t* window, const char* text, TTF_Font* font, SDL_Color color, SDL_Rect* rect)
+{
+  if(!window || !text || !font)
+  {
+    error_print("Bad input");
+
+    return 1;
+  }
+
+  SDL_Renderer* renderer = window_renderer_get(window);
+
+  if(!renderer)
+  {
+    error_print("Failed to get renderer from window %s", window->name);
+    
+    return 2;
+  }
+
+  render_target_text_render(renderer, window->texture, text, font, color, rect);
+
+  return 0;
+}
+
+/*
  * Render texture to window
  *
  * The textures of child windows will be rendered over this texture
@@ -87,7 +113,7 @@ int window_texture_render(window_t* window, SDL_Texture* texture, SDL_Rect* rect
     return 2;
   }
 
-  render_target_texture_render(renderer, window->texture, texture, NULL, rect);
+  render_target_texture_render(renderer, window->texture, texture, rect);
 
   return 0;
 }
@@ -119,7 +145,7 @@ int window_render(window_t* window)
 
     window_render(child);
 
-    render_target_texture_render(renderer, window->texture, child->texture, NULL, &child->rect);
+    render_target_texture_render(renderer, window->texture, child->texture, &child->rect);
 
     render_target_clear(renderer, child->texture);
   }

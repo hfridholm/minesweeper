@@ -22,6 +22,7 @@ void game_routine(screen_t* screen, assets_t* assets, field_t* field)
   bool running = true;
 
   SDL_Event event;
+  SDL_memset(&event, 0, sizeof(event)); // Initialize all fields to zero
 
   game_render(screen, assets, field);
 
@@ -108,6 +109,8 @@ int main(int argc, char* argv[])
 
 
   menu_window_add(menu, window_create("field", (SDL_Rect) {0, 0, width, height}));
+
+  menu_window_add(menu, window_create("data", (SDL_Rect) {0, 0, width, 40}));
 
   menu_window_add(menu, window_create("result", (SDL_Rect) {0, 0, width, height}));
 

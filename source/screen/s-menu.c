@@ -104,7 +104,7 @@ int menu_texture_render(menu_t* menu, SDL_Texture* texture, SDL_Rect* rect)
     return 2;
   }
 
-  render_target_texture_render(renderer, menu->texture, texture, NULL, rect);
+  render_target_texture_render(renderer, menu->texture, texture, rect);
 
   return 0;
 }
@@ -140,7 +140,7 @@ int menu_render(menu_t* menu)
 
     window_render(window);
 
-    render_target_texture_render(renderer, menu->texture, window->texture, NULL, &window->rect);
+    render_target_texture_render(renderer, menu->texture, window->texture, &window->rect);
 
     render_target_clear(renderer, window->texture);
   }

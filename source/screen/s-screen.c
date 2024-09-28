@@ -181,7 +181,7 @@ int screen_texture_render(screen_t* screen, SDL_Texture* texture, SDL_Rect* rect
     return 2;
   }
 
-  render_target_texture_render(renderer, NULL, texture, NULL, rect);
+  render_target_texture_render(renderer, NULL, texture, rect);
 
   return 0;
 }
@@ -223,7 +223,7 @@ int screen_render(screen_t* screen)
   };
 
   // Render the menu texture to the screen
-  render_target_texture_render(renderer, NULL, menu->texture, NULL, &rect);
+  render_target_texture_render(renderer, NULL, menu->texture, &rect);
 
   // Clear the menu texture
   render_target_clear(renderer, menu->texture);

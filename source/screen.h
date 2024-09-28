@@ -47,6 +47,8 @@ extern int       window_child_add(window_t* window, window_t* child);
 
 extern int       window_texture_render(window_t* window, SDL_Texture* texture, SDL_Rect* rect);
 
+extern int       window_text_render(window_t* window, const char* text, TTF_Font* font, SDL_Color color, SDL_Rect* rect);
+
 /*
  *
  */
@@ -102,7 +104,7 @@ extern SDL_Texture* texture_load(SDL_Renderer* renderer, const char* file);
 
 extern SDL_Texture* texture_create(SDL_Renderer* renderer, int width, int height);
 
-extern int          texture_render(SDL_Renderer* renderer, SDL_Texture* texture, SDL_Rect* srcrect, SDL_Rect* dstrect);
+extern int          texture_render(SDL_Renderer* renderer, SDL_Texture* texture, SDL_Rect* rect);
 
 extern void         texture_destroy(SDL_Texture** texture);
 
@@ -124,7 +126,7 @@ extern SDL_Color COLOR_RED;
 
 extern TTF_Font*    font_load(const char* file, int size);
 
-extern SDL_Texture* text_texture_create(SDL_Renderer* renderer, const char* text, TTF_Font* font, SDL_Color color);
+extern int          text_render(SDL_Renderer* renderer, const char* text, TTF_Font* font, SDL_Color color, SDL_Rect* rect);
 
 extern void         font_close(TTF_Font** font);
 

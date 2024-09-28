@@ -119,7 +119,7 @@ int render_target_clear(SDL_Renderer* renderer, SDL_Texture* target)
 /*
  * Render texture to target texture
  */
-int render_target_texture_render(SDL_Renderer* renderer, SDL_Texture* target, SDL_Texture* texture, SDL_Rect* srcrect, SDL_Rect* dstrect)
+int render_target_texture_render(SDL_Renderer* renderer, SDL_Texture* target, SDL_Texture* texture, SDL_Rect* rect)
 {
   SDL_Texture* old_target = SDL_GetRenderTarget(renderer);
 
@@ -129,7 +129,7 @@ int render_target_texture_render(SDL_Renderer* renderer, SDL_Texture* target, SD
     return 1;
   }
 
-  int status = texture_render(renderer, texture, srcrect, dstrect);
+  int status = texture_render(renderer, texture, rect);
 
   // 2. Change back to the old target
   if(render_target_set(renderer, old_target) != 0)
@@ -143,9 +143,9 @@ int render_target_texture_render(SDL_Renderer* renderer, SDL_Texture* target, SD
 /*
  * Render texture
  */
-int texture_render(SDL_Renderer* renderer, SDL_Texture* texture, SDL_Rect* srcrect, SDL_Rect* dstrect)
+int texture_render(SDL_Renderer* renderer, SDL_Texture* texture, SDL_Rect* rect)
 {
-  int status = SDL_RenderCopy(renderer, texture, srcrect, dstrect);
+  int status = SDL_RenderCopy(renderer, texture, NULL, rect);
 
   if(status != 0)
   {

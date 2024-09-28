@@ -103,13 +103,11 @@ static void minefield_render(window_t* window, assets_t* assets, field_t* field)
  */
 void game_won_render(menu_t* menu, assets_t* assets, field_t* field)
 {
-  SDL_Texture* texture = text_texture_create(menu->screen->renderer, "Won!", assets->font, COLOR_GREEN);
-
   window_t* window = menu_window_get(menu, "result");
 
   if(window)
   {
-    window_texture_render(window, texture, NULL);
+    window_text_render(window, "You won!", assets->font, COLOR_GREEN, NULL);
   }
 
   chunk_play(assets->chunks.won);
@@ -122,13 +120,11 @@ void game_won_render(menu_t* menu, assets_t* assets, field_t* field)
  */
 void game_lost_render(menu_t* menu, assets_t* assets, field_t* field)
 {
-  SDL_Texture* texture = text_texture_create(menu->screen->renderer, "Lost!", assets->font, COLOR_RED);
-
   window_t* window = menu_window_get(menu, "result");
 
   if(window)
   {
-    window_texture_render(window, texture, NULL);
+    window_text_render(window, "Lost!", assets->font, COLOR_RED, NULL);
   }
 
   chunk_play(assets->chunks.lost);
@@ -175,6 +171,13 @@ static void menu_field_render(screen_t* screen, assets_t* assets, field_t* field
 
     default:
       break;
+  }
+
+  window_t* data_window = menu_window_get(menu, "data");
+
+  if(data_window)
+  {
+    window_text_render(data_window, "Data", assets->font, COLOR_WHITE, NULL);
   }
 }
 
