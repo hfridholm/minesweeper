@@ -15,12 +15,10 @@
  */
 static void menu_field_window_field_resize(window_t* window, assets_t* assets, field_t* field, int menuw, int menuh)
 {
-  info_print("menuw:%d menuh:%d", menuw, menuh);
-
   SDL_Rect rect = 
   {
-    .w = (float) menuw / 1.2f,
-    .h = (float) menuh / 1.2f
+    .w = (float) menuw / 1.1f,
+    .h = (float) menuh / 1.1f
   };
 
   int squarew = (float) rect.w / (float) field->width;
@@ -38,12 +36,6 @@ static void menu_field_window_field_resize(window_t* window, assets_t* assets, f
     .w = width,
     .h = height
   };
-
-  info_print("window rect x:%d y:%d w:%d h:%d",
-             window->rect.x,
-             window->rect.y,
-             window->rect.w,
-             window->rect.h);
 
   window_texture_resize(window, window->rect.w, window->rect.h);
 }

@@ -85,12 +85,6 @@ SDL_Rect square_rect_get(window_t* window, field_t* field, int windex, int hinde
  */
 static void minefield_render(window_t* window, assets_t* assets, field_t* field)
 {
-  info_print("rendering window rect: x:%d y:%d w:%d h%d",
-             window->rect.x,
-             window->rect.y,
-             window->rect.w,
-             window->rect.h);
-
   for(int windex = 0; windex < field->width; windex++)
   {
     for(int hindex = 0; hindex < field->height; hindex++)
@@ -117,8 +111,6 @@ void game_won_render(menu_t* menu, assets_t* assets, field_t* field)
   }
 
   chunk_play(assets->chunks.won);
-
-  info_print("Game won!");
 }
 
 /*
@@ -134,12 +126,10 @@ void game_lost_render(menu_t* menu, assets_t* assets, field_t* field)
   }
 
   chunk_play(assets->chunks.lost);
-
-  info_print("Game lost!");
 }
 
-Uint32 start_ticks, end_ticks;
-int frame_count, fps;
+Uint32 start_ticks = 0, end_ticks = 0;
+int    frame_count = 0, fps = 0;
 
 /*
  *

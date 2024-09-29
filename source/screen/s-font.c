@@ -131,12 +131,8 @@ static int clamped_text_rect_create(SDL_Rect* clamped_rect, SDL_Renderer* render
   float wratio = (float) textw / (float) texth;
   float hratio = (float) texth / (float) textw;
 
-  info_print("textw:%d texth:%d wratio:%f hratio:%f", textw, texth, wratio, hratio);
-
   if(!rect)
   {
-    info_print("texture_w_and_h_get");
-
     SDL_Texture* texture = SDL_GetRenderTarget(renderer);
 
     int rectw, recth;
@@ -147,8 +143,6 @@ static int clamped_text_rect_create(SDL_Rect* clamped_rect, SDL_Renderer* render
 
       return 3;
     }
-
-    info_print("Size of renderer: %d x %d", rectw, recth);
 
     int clampedw = MIN(recth * wratio, rectw);
     int clampedh = MIN(rectw * hratio, recth);
@@ -202,12 +196,6 @@ int text_render(SDL_Renderer* renderer, const char* text, TTF_Font* font, SDL_Co
 
     return 2;
   }
-
-  info_print("clamped rect: x:%d y:%d w:%d h:%d",
-             clamped_rect.x,
-             clamped_rect.y,
-             clamped_rect.w,
-             clamped_rect.h);
 
   if(texture_render(renderer, texture, &clamped_rect) != 0)
   {

@@ -58,19 +58,21 @@ static int mines_place(field_t* field, int mine_amount)
     indexes[index] = index;
   }
 
-  for(int count = 0; count <= mine_amount; count++)
+  for(int count = 0; count < mine_amount; count++)
   {
-    int square_index = (rand() % (square_count - count));
+    int array_index = (rand() % (square_count - count));
+
+    int square_index = indexes[array_index];
 
     int windex = square_index % field->width;
-    int hindex = square_index / field->height;
+    int hindex = square_index / field->width;
 
     square_t* square = &field->squares[windex][hindex];
 
     square->mine     = true;
     square->exploded = false;
 
-    index_remove(indexes, square_count, square_index);
+    index_remove(indexes, square_count, array_index);
   }
 
   return 0;

@@ -8,7 +8,7 @@
 
 #include "minesweeper.h"
 
-#define FPS 5
+#define FPS 10
 
 /*
  *
@@ -17,7 +17,7 @@ void game_routine(screen_t* screen, assets_t* assets, field_t* field)
 {
   info_print("Start game routine");
 
-  Uint32 end_ticks, start_ticks;
+  Uint32 end_ticks = 0, start_ticks = 0;
 
   bool running = true;
 
@@ -82,6 +82,8 @@ void game_routine(screen_t* screen, assets_t* assets, field_t* field)
  */
 int main(int argc, char* argv[])
 {
+  srand(time(NULL));
+
   info_print("Start of main");
 
   if(sdl_drivers_init() != 0)
@@ -91,7 +93,8 @@ int main(int argc, char* argv[])
     return 1;
   }
 
-  field_t* field = field_create(30, 16, 100, 30);
+  // field_t* field = field_create(40, 15, 100, 50);
+  field_t* field = field_create(10, 8, 15, 10);
 
   screen_t* screen = screen_create(800, 600, "Minesweeper");
 

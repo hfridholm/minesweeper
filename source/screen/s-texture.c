@@ -163,11 +163,11 @@ void texture_destroy(SDL_Texture** texture)
 {
   if(*texture == NULL) return;
 
-  info_print("Destroying texture");
+  // info_print("Destroying texture");
 
   SDL_DestroyTexture(*texture);
 
-  info_print("Destroyed texture");
+  // info_print("Destroyed texture");
 
   *texture = NULL;
 }
