@@ -216,14 +216,8 @@ int screen_render(screen_t* screen)
 
   menu_render(menu);
 
-  SDL_Rect rect =
-  {
-    .w = screen->width,
-    .h = screen->height
-  };
-
   // Render the menu texture to the screen
-  render_target_texture_render(renderer, NULL, menu->texture, &rect);
+  render_target_texture_render(renderer, NULL, menu->texture, NULL);
 
   // Clear the menu texture
   render_target_clear(renderer, menu->texture);

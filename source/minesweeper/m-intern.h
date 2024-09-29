@@ -21,4 +21,6 @@ extern window_t* event_window_get(menu_t* menu, SDL_Event* event);
 
 extern bool      event_is_inside_rect(SDL_Event* event, SDL_Rect* rect);
 
+extern void      event_resize_handler(screen_t* screen, assets_t* assets, field_t* field, SDL_Event* event);
+
 #endif // M_INTERN_H

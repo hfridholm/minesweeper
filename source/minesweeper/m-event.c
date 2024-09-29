@@ -70,7 +70,15 @@ void event_mouse_motion_handler(screen_t* screen, assets_t* assets, field_t* fie
  */
 void event_window_handler(screen_t* screen, assets_t* assets, field_t* field, SDL_Event* event)
 {
+  switch(event->window.event)
+  {
+    case SDL_WINDOWEVENT_RESIZED: case SDL_WINDOWEVENT_SIZE_CHANGED:
+      event_resize_handler(screen, assets, field, event);
+      break;
 
+    default:
+      break;
+  }
 }
 
 /*

@@ -171,3 +171,13 @@ void texture_destroy(SDL_Texture** texture)
 
   *texture = NULL;
 }
+
+/*
+ *
+ */
+void texture_resize(SDL_Texture** texture, SDL_Renderer* renderer, int width, int height)
+{
+  texture_destroy(texture);
+
+  *texture = texture_create(renderer, width, height);
+}

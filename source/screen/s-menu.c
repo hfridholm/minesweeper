@@ -82,6 +82,32 @@ SDL_Renderer* menu_renderer_get(menu_t* menu)
 }
 
 /*
+ *
+ */
+int menu_texture_resize(menu_t* menu, int width, int height)
+{
+  if(!menu)
+  {
+    error_print("Bad input");
+
+    return 1;
+  }
+
+  SDL_Renderer* renderer = menu_renderer_get(menu);
+
+  if(!renderer)
+  {
+    error_print("Failed to get renderer from menu %s", menu->name);
+    
+    return 2;
+  }
+
+  texture_resize(&menu->texture, renderer, width, height);
+
+  return 0;
+}
+
+/*
  * Render a texture directly to the menu, in the background
  *
  * The textures of windows will be rendered over this texture

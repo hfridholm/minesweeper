@@ -85,6 +85,12 @@ SDL_Rect square_rect_get(window_t* window, field_t* field, int windex, int hinde
  */
 static void minefield_render(window_t* window, assets_t* assets, field_t* field)
 {
+  info_print("rendering window rect: x:%d y:%d w:%d h%d",
+             window->rect.x,
+             window->rect.y,
+             window->rect.w,
+             window->rect.h);
+
   for(int windex = 0; windex < field->width; windex++)
   {
     for(int hindex = 0; hindex < field->height; hindex++)
@@ -132,6 +138,9 @@ void game_lost_render(menu_t* menu, assets_t* assets, field_t* field)
   info_print("Game lost!");
 }
 
+Uint32 start_ticks, end_ticks;
+int frame_count, fps;
+
 /*
  *
  */
@@ -177,7 +186,24 @@ static void menu_field_render(screen_t* screen, assets_t* assets, field_t* field
 
   if(data_window)
   {
-    window_text_render(data_window, "Data", assets->font, COLOR_WHITE, NULL);
+    // Calculating fps
+    frame_count++;
+
+    end_ticks = SDL_GetTicks();
+
+    if(end_ticks - start_ticks >= 1000)
+    {
+      fps = (float) frame_count / (float) ((end_ticks - start_ticks) / 1000);
+
+      frame_count = 0;
+      start_ticks = end_ticks;
+    }
+
+    char string[32];
+
+    sprintf(string, "%d", fps);
+
+    window_text_render(data_window, string, assets->font, COLOR_WHITE, NULL);
   }
 }
 

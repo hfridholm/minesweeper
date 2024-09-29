@@ -8,7 +8,7 @@
 
 #include "minesweeper.h"
 
-#define FPS 1
+#define FPS 5
 
 /*
  *
@@ -17,7 +17,7 @@ void game_routine(screen_t* screen, assets_t* assets, field_t* field)
 {
   info_print("Start game routine");
 
-  Uint32 start_ticks, last_ticks;
+  Uint32 end_ticks, start_ticks;
 
   bool running = true;
 
@@ -42,14 +42,14 @@ void game_routine(screen_t* screen, assets_t* assets, field_t* field)
         event_handler(screen, assets, field, &event);
       }
 
-      start_ticks = SDL_GetTicks();
+      end_ticks = SDL_GetTicks();
 
       // Only render the screen number of FPS
-      if(start_ticks - last_ticks >= 1000 / FPS)
+      if(end_ticks - start_ticks >= 1000 / FPS)
       {
         game_render(screen, assets, field);
 
-        last_ticks = start_ticks;
+        start_ticks = end_ticks;
       }
     }
 
@@ -91,7 +91,7 @@ int main(int argc, char* argv[])
     return 1;
   }
 
-  field_t* field = field_create(8, 6, 10, 5);
+  field_t* field = field_create(30, 16, 100, 30);
 
   screen_t* screen = screen_create(800, 600, "Minesweeper");
 
@@ -113,6 +113,9 @@ int main(int argc, char* argv[])
   menu_window_add(menu, window_create("data", (SDL_Rect) {0, 0, width, 40}));
 
   menu_window_add(menu, window_create("result", (SDL_Rect) {0, 0, width, height}));
+
+
+  screen_resize(screen, assets, field, width, height);
 
 
   game_routine(screen, assets, field);

@@ -65,6 +65,32 @@ SDL_Renderer* window_renderer_get(window_t* window)
 }
 
 /*
+ *
+ */
+int window_texture_resize(window_t* window, int width, int height)
+{
+  if(!window)
+  {
+    error_print("Bad input");
+
+    return 1;
+  }
+
+  SDL_Renderer* renderer = window_renderer_get(window);
+
+  if(!renderer)
+  {
+    error_print("Failed to get renderer from window %s", window->name);
+    
+    return 2;
+  }
+
+  texture_resize(&window->texture, renderer, width, height);
+
+  return 0;
+}
+
+/*
  * Render text in window
  */
 int window_text_render(window_t* window, const char* text, TTF_Font* font, SDL_Color color, SDL_Rect* rect)

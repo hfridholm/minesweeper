@@ -29,4 +29,7 @@ extern int window_render(window_t* window);
 
 extern int menu_render(menu_t* menu);
 
+
+extern void texture_resize(SDL_Texture** texture, SDL_Renderer* renderer, int width, int height);
+
 #endif // S_INTERN_H

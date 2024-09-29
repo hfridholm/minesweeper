@@ -19,6 +19,10 @@
 
 #include "debug.h"
 
+
+#define MIN(a, b) ((a) < (b) ? (a) : (b))
+
+
 typedef struct window_t window_t;
 
 typedef struct menu_t   menu_t;
@@ -45,6 +49,8 @@ extern void      window_destroy(window_t** window);
 
 extern int       window_child_add(window_t* window, window_t* child);
 
+extern int       window_texture_resize(window_t* window, int width, int height);
+
 extern int       window_texture_render(window_t* window, SDL_Texture* texture, SDL_Rect* rect);
 
 extern int       window_text_render(window_t* window, const char* text, TTF_Font* font, SDL_Color color, SDL_Rect* rect);
@@ -67,6 +73,8 @@ extern menu_t*   menu_create(char* name);
 extern void      menu_destroy(menu_t** menu);
 
 extern int       menu_window_add(menu_t* menu, window_t* window);
+
+extern int       menu_texture_resize(menu_t* menu, int width, int height);
 
 extern int       menu_texture_render(menu_t* menu, SDL_Texture* texture, SDL_Rect* rect);
 

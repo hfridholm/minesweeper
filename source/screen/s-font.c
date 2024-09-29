@@ -107,8 +107,6 @@ static int texture_w_and_h_get(int* w, int* h, SDL_Texture* texture)
   return 0;
 }
 
-#define MIN(a, b) ((a) < (b) ? (a) : (b))
-
 /*
  * Create a clamped rect with the ratio of (w, h)
  */
