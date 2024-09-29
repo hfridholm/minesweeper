@@ -22,7 +22,7 @@ extern int render_target_clear(SDL_Renderer* renderer, SDL_Texture* target);
 
 extern int render_target_texture_render(SDL_Renderer* renderer, SDL_Texture* target, SDL_Texture* texture, SDL_Rect* rect);
 
-extern int render_target_text_render(SDL_Renderer* renderer, SDL_Texture* target, const char* text, TTF_Font* font, SDL_Color color, SDL_Rect* rect);
+extern int render_target_text_render(SDL_Renderer* renderer, SDL_Texture* target, const char* text, TTF_Font* font, SDL_Color color, SDL_Rect* rect, side_t wside, side_t hside);
 
 
 extern int window_render(window_t* window);

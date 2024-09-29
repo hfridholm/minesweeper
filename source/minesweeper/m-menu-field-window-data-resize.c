@@ -74,8 +74,8 @@ void menu_field_window_data_resize(window_t* window, int parentw, int parenth)
   {
     .x = 0,
     .y = 0,
-    .w = (float) parentw /  1.0f,
-    .h = (float) parenth / 10.0f
+    .w = (float) parentw * 0.25f,
+    .h = parenth
   };
 
   window_texture_resize(window, window->rect.w, window->rect.h);

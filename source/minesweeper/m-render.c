@@ -107,7 +107,7 @@ void game_won_render(menu_t* menu, assets_t* assets, field_t* field)
 
   if(window)
   {
-    window_text_render(window, "You won!", assets->font, COLOR_GREEN, NULL);
+    window_text_render(window, "You won!", assets->font, COLOR_GREEN, NULL, SIDE_CENTER, SIDE_CENTER);
   }
 
   chunk_play(assets->chunks.won);
@@ -122,7 +122,7 @@ void game_lost_render(menu_t* menu, assets_t* assets, field_t* field)
 
   if(window)
   {
-    window_text_render(window, "Lost!", assets->font, COLOR_RED, NULL);
+    window_text_render(window, "You lost!", assets->font, COLOR_RED, NULL, SIDE_CENTER, SIDE_CENTER);
   }
 
   chunk_play(assets->chunks.lost);
@@ -162,7 +162,7 @@ static void window_fps_render(window_t* window, assets_t* assets)
 
   sprintf(string, "FPS: %d", fps);
 
-  window_text_render(window, string, assets->font, COLOR_WHITE, NULL);
+  window_text_render(window, string, assets->font, COLOR_WHITE, NULL, SIDE_LEFT, SIDE_CENTER);
 }
 
 /*
@@ -176,7 +176,7 @@ static void window_swept_render(window_t* window, assets_t* assets, field_t* fie
 
   sprintf(string, "SWEPT: %03d/%03d", field->swept_amount, square_count - field->mine_amount);
 
-  window_text_render(window, string, assets->font, COLOR_WHITE, NULL);
+  window_text_render(window, string, assets->font, COLOR_WHITE, NULL, SIDE_LEFT, SIDE_CENTER);
 }
 
 /*
@@ -188,7 +188,7 @@ static void window_flags_render(window_t* window, assets_t* assets, field_t* fie
 
   sprintf(string, "FLAGS: %03d/%03d", field->flag_amount, field->max_flags);
 
-  window_text_render(window, string, assets->font, COLOR_WHITE, NULL);
+  window_text_render(window, string, assets->font, COLOR_WHITE, NULL, SIDE_LEFT, SIDE_CENTER);
 }
 
 /*

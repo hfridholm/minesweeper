@@ -117,7 +117,7 @@ int window_texture_resize(window_t* window, int width, int height)
 /*
  * Render text in window
  */
-int window_text_render(window_t* window, const char* text, TTF_Font* font, SDL_Color color, SDL_Rect* rect)
+int window_text_render(window_t* window, const char* text, TTF_Font* font, SDL_Color color, SDL_Rect* rect, side_t wside, side_t hside)
 {
   if(!window || !text || !font)
   {
@@ -135,7 +135,7 @@ int window_text_render(window_t* window, const char* text, TTF_Font* font, SDL_C
     return 2;
   }
 
-  render_target_text_render(renderer, window->texture, text, font, color, rect);
+  render_target_text_render(renderer, window->texture, text, font, color, rect, wside, hside);
 
   return 0;
 }

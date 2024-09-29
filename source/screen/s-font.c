@@ -110,7 +110,7 @@ static int texture_w_and_h_get(int* w, int* h, SDL_Texture* texture)
 /*
  * Create a clamped rect with the ratio of (w, h)
  */
-static int clamped_text_rect_create(SDL_Rect* clamped_rect, SDL_Renderer* renderer, const char* text, TTF_Font* font, SDL_Rect* rect)
+static int text_clamped_rect_create(SDL_Rect* clamped_rect, SDL_Renderer* renderer, const char* text, TTF_Font* font, SDL_Rect* rect, side_t wside, side_t hside)
 {
   if(!clamped_rect)
   {
@@ -149,8 +149,8 @@ static int clamped_text_rect_create(SDL_Rect* clamped_rect, SDL_Renderer* render
 
     *clamped_rect = (SDL_Rect)
     {
-      .x = (rectw - clampedw) / 2,
-      .y = (recth - clampedh) / 2,
+      .x = (wside * (rectw - clampedw) / 2),
+      .y = (hside * (recth - clampedh) / 2),
       .w = clampedw,
       .h = clampedh
     };
@@ -164,8 +164,8 @@ static int clamped_text_rect_create(SDL_Rect* clamped_rect, SDL_Renderer* render
 
     *clamped_rect = (SDL_Rect)
     {
-      .x = rect->x,
-      .y = rect->y,
+      .x = rect->x + (wside * (rect->w - clampedw) / 2),
+      .y = rect->y + (hside * (rect->h - clampedh) / 2),
       .w = clampedw,
       .h = clampedh
     };
@@ -177,27 +177,27 @@ static int clamped_text_rect_create(SDL_Rect* clamped_rect, SDL_Renderer* render
 /*
  *
  */
-int text_render(SDL_Renderer* renderer, const char* text, TTF_Font* font, SDL_Color color, SDL_Rect* rect)
+int text_render(SDL_Renderer* renderer, const char* text, TTF_Font* font, SDL_Color color, SDL_Rect* rect, side_t wside, side_t hside)
 {
+  SDL_Rect text_rect;
+
+  if(text_clamped_rect_create(&text_rect, renderer, text, font, rect, wside, hside) != 0)
+  {
+    error_print("Failed to create text rect");
+
+    return 1;
+  }
+
   SDL_Texture* texture = text_texture_create(renderer, text, font, color);
 
   if(!texture)
   {
-    return 1;
-  }
-
-  SDL_Rect clamped_rect;
-
-  if(clamped_text_rect_create(&clamped_rect, renderer, text, font, rect) != 0)
-  {
-    texture_destroy(&texture);
-    
-    error_print("Failed to create clamped text rect");
+    error_print("Failed to create text texture");
 
     return 2;
   }
 
-  if(texture_render(renderer, texture, &clamped_rect) != 0)
+  if(texture_render(renderer, texture, &text_rect) != 0)
   {
     texture_destroy(&texture);
     
@@ -214,7 +214,7 @@ int text_render(SDL_Renderer* renderer, const char* text, TTF_Font* font, SDL_Co
 /*
  * Render texture to target texture
  */
-int render_target_text_render(SDL_Renderer* renderer, SDL_Texture* target, const char* text, TTF_Font* font, SDL_Color color, SDL_Rect* rect)
+int render_target_text_render(SDL_Renderer* renderer, SDL_Texture* target, const char* text, TTF_Font* font, SDL_Color color, SDL_Rect* rect, side_t wside, side_t hside)
 {
   SDL_Texture* old_target = SDL_GetRenderTarget(renderer);
 
@@ -224,7 +224,7 @@ int render_target_text_render(SDL_Renderer* renderer, SDL_Texture* target, const
     return 1;
   }
 
-  int status = text_render(renderer, text, font, color, rect);
+  int status = text_render(renderer, text, font, color, rect, wside, hside);
 
   // 2. Change back to the old target
   if(render_target_set(renderer, old_target) != 0)

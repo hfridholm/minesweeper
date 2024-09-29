@@ -22,7 +22,49 @@
 
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 
+/*
+ *
+ */
+extern SDL_Texture* texture_load(SDL_Renderer* renderer, const char* file);
 
+extern SDL_Texture* texture_create(SDL_Renderer* renderer, int width, int height);
+
+extern int          texture_render(SDL_Renderer* renderer, SDL_Texture* texture, SDL_Rect* rect);
+
+extern void         texture_destroy(SDL_Texture** texture);
+
+/*
+ *
+ */
+extern Mix_Chunk* chunk_load(const char* file);
+
+extern int        chunk_play(Mix_Chunk* chunk);
+
+extern void       chunk_free(Mix_Chunk** chunk);
+
+/*
+ *
+ */
+extern SDL_Color COLOR_WHITE;
+extern SDL_Color COLOR_GREEN;
+extern SDL_Color COLOR_RED;
+
+typedef enum
+{
+  SIDE_LEFT   = 0,
+  SIDE_CENTER = 1,
+  SIDE_RIGHT  = 2
+} side_t;
+
+extern TTF_Font*    font_load(const char* file, int size);
+
+extern int          text_render(SDL_Renderer* renderer, const char* text, TTF_Font* font, SDL_Color color, SDL_Rect* rect, side_t wside, side_t hside);
+
+extern void         font_close(TTF_Font** font);
+
+/*
+ *
+ */
 typedef struct window_t window_t;
 
 typedef struct menu_t   menu_t;
@@ -57,7 +99,7 @@ extern int       window_texture_resize(window_t* window, int width, int height);
 
 extern int       window_texture_render(window_t* window, SDL_Texture* texture, SDL_Rect* rect);
 
-extern int       window_text_render(window_t* window, const char* text, TTF_Font* font, SDL_Color color, SDL_Rect* rect);
+extern int       window_text_render(window_t* window, const char* text, TTF_Font* font, SDL_Color color, SDL_Rect* rect, side_t wside, side_t hside);
 
 /*
  *
@@ -108,46 +150,6 @@ extern int       screen_menu_add(screen_t* screen, menu_t* menu);
 extern int       screen_render(screen_t* screen);
 
 extern menu_t*   screen_menu_get(screen_t* screen, const char* name);
-
-/*
- *
- */
-extern SDL_Texture* texture_load(SDL_Renderer* renderer, const char* file);
-
-extern SDL_Texture* texture_create(SDL_Renderer* renderer, int width, int height);
-
-extern int          texture_render(SDL_Renderer* renderer, SDL_Texture* texture, SDL_Rect* rect);
-
-extern void         texture_destroy(SDL_Texture** texture);
-
-/*
- *
- */
-extern Mix_Chunk* chunk_load(const char* file);
-
-extern int        chunk_play(Mix_Chunk* chunk);
-
-extern void       chunk_free(Mix_Chunk** chunk);
-
-/*
- *
- */
-extern SDL_Color COLOR_WHITE;
-extern SDL_Color COLOR_GREEN;
-extern SDL_Color COLOR_RED;
-
-typedef enum text_side_t
-{
-  SIDE_LEFT,
-  SIDE_CENTER,
-  SIDE_RIGHT
-} text_side_t;
-
-extern TTF_Font*    font_load(const char* file, int size);
-
-extern int          text_render(SDL_Renderer* renderer, const char* text, TTF_Font* font, SDL_Color color, SDL_Rect* rect);
-
-extern void         font_close(TTF_Font** font);
 
 /*
  *

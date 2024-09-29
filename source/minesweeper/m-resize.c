@@ -9,17 +9,37 @@
 #include "m-intern.h"
 
 /*
+ * Create a rect with the bounds for the minefield window
+ *
+ * The bounds are the outer most edges that the minefield can stretch out to
+ */
+static SDL_Rect window_field_bound_rect_create(int parentw, int parenth)
+{
+  int x = (float) parentw * 0.25f;
+  int y = 0;
+
+  int w = (float) (parentw - x) * 0.90f;
+  int h = (float) (parenth - y) * 0.90f;
+
+  SDL_Rect rect = 
+  {
+    .x = x + (float) (parentw - x - w) / 2.f,
+    .y = y + (float) (parenth - y - h) / 2.f,
+    .w = w,
+    .h = h
+  };
+
+  return rect;
+}
+
+/*
  * PARAMS
  * - int parentw | Width  of menu field
  * - int parenth | Height of menu field
  */
 static void menu_field_window_field_resize(window_t* window, field_t* field, int parentw, int parenth)
 {
-  SDL_Rect rect = 
-  {
-    .w = (float) parentw / 1.1f,
-    .h = (float) parenth / 1.1f
-  };
+  SDL_Rect rect = window_field_bound_rect_create(parentw, parenth);
 
   int squarew = (float) rect.w / (float) field->width;
   int squareh = (float) rect.h / (float) field->height;
@@ -31,8 +51,8 @@ static void menu_field_window_field_resize(window_t* window, field_t* field, int
   
   window->rect = (SDL_Rect)
   {
-    .x = (float) (parentw - width ) / 2.0f,
-    .y = (float) (parenth - height) / 2.0f,
+    .x = rect.x + ((float) (rect.w - width ) / 2.0f),
+    .y = rect.y + ((float) (rect.h - height) / 2.0f),
     .w = width,
     .h = height
   };
