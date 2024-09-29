@@ -93,8 +93,8 @@ int main(int argc, char* argv[])
     return 1;
   }
 
-  // field_t* field = field_create(40, 15, 100, 50);
-  field_t* field = field_create(10, 8, 15, 10);
+  field_t* field = field_create(40, 15, 100, 50);
+  // field_t* field = field_create(10, 8, 15, 10);
 
   screen_t* screen = screen_create(800, 600, "Minesweeper");
 

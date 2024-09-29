@@ -43,7 +43,10 @@ typedef struct field_t
 {
   int           width;
   int           height;
+  int           mine_amount;
+  int           swept_amount;
   int           max_flags;
+  int           flag_amount;
   square_t**    squares;
   field_state_t state;
 } field_t;

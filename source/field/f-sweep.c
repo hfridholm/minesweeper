@@ -7,6 +7,17 @@
 #include "../field.h"
 
 /*
+ * The minefield is swept when
+ * all of the sqaures, which are not mines, are swept
+ */
+static bool minefield_is_swept(field_t* field)
+{
+  int square_count = field->width * field->height;
+
+  return (field->swept_amount == square_count - field->mine_amount);
+}
+
+/*
  * Sweep adjacent squares
  */
 static void adjacent_squares_sweep(field_t* field, square_t* square)
@@ -60,9 +71,19 @@ int square_sweep(field_t* field, square_t* square)
 
     field->state = GAME_LOST;
   }
-  else if(square->amount == 0) 
+  else
   {
-    adjacent_squares_sweep(field, square);
+    field->swept_amount++;
+
+    if(square->amount == 0)
+    {
+      adjacent_squares_sweep(field, square);
+    }
+
+    if(minefield_is_swept(field))
+    {
+      field->state = GAME_WON;
+    }
   }
 
   return 0;

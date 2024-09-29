@@ -127,13 +127,17 @@ field_t* field_create(int width, int height, int mine_amount, int max_flags)
   info_print("Creating minefield");
   
   field_t* field = malloc(sizeof(field_t));
+  memset(field, 0, sizeof(field_t));
 
-  field->width     = width;
-  field->height    = height;
-  field->max_flags = max_flags;
+  field->width  = width;
+  field->height = height;
+
+  field->mine_amount = mine_amount;
+  field->max_flags   = max_flags;
 
   field->state = GAME_ACTIVE;
 
+  // 1. Initialize all squares
   field->squares = malloc(sizeof(square_t*) * width);
 
   for(int windex = 0; windex < width; windex++)
