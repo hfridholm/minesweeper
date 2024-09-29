@@ -86,7 +86,7 @@ static void event_mouse_down_right_handler(window_t* window, assets_t* assets, f
     return;
   }
 
-  if(square_flag(square) != 0)
+  if(square_flag(field, square) != 0)
   {
     chunk_play(assets->field.chunks.flagged);
   }

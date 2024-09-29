@@ -134,29 +134,107 @@ int    frame_count = 0, fps = 0;
 /*
  *
  */
-static void menu_field_render(screen_t* screen, assets_t* assets, field_t* field)
+static int current_fps_get(void)
 {
-  menu_t* menu = screen_menu_get(screen, "field");
+  frame_count++;
 
-  if(!menu)
+  end_ticks = SDL_GetTicks();
+
+  if(end_ticks - start_ticks >= 1000)
   {
-    error_print("Field menu doesn't exist");
+    fps = (float) frame_count / (float) ((end_ticks - start_ticks) / 1000);
 
-    return;
+    frame_count = 0;
+    start_ticks = end_ticks;
   }
 
+  return fps;
+}
+
+/*
+ *
+ */
+static void window_fps_render(window_t* window, assets_t* assets)
+{
+  int fps = current_fps_get();
+
+  char string[32];
+
+  sprintf(string, "FPS: %d", fps);
+
+  window_text_render(window, string, assets->font, COLOR_WHITE, NULL);
+}
+
+/*
+ *
+ */
+static void window_swept_render(window_t* window, assets_t* assets, field_t* field)
+{
+  char string[32];
+
+  int square_count = field->width * field->height;
+
+  sprintf(string, "SWEPT: %03d/%03d", field->swept_amount, square_count - field->mine_amount);
+
+  window_text_render(window, string, assets->font, COLOR_WHITE, NULL);
+}
+
+/*
+ *
+ */
+static void window_flags_render(window_t* window, assets_t* assets, field_t* field)
+{
+  char string[32];
+
+  sprintf(string, "FLAGS: %03d/%03d", field->flag_amount, field->max_flags);
+
+  window_text_render(window, string, assets->font, COLOR_WHITE, NULL);
+}
+
+/*
+ *
+ */
+static void menu_field_window_data_render(window_t* window, assets_t* assets, field_t* field)
+{
+  window_t* window_fps = window_child_get(window, "fps");
+
+  if(window_fps)
+  {
+    window_fps_render(window_fps, assets);
+  }
+
+  window_t* window_swept = window_child_get(window, "swept");
+
+  if(window_swept)
+  {
+    window_swept_render(window_swept, assets, field);
+  }
+
+  window_t* window_flags = window_child_get(window, "flags");
+
+  if(window_flags)
+  {
+    window_flags_render(window_flags, assets, field);
+  }
+}
+
+/*
+ *
+ */
+static void menu_field_render(menu_t* menu, assets_t* assets, field_t* field)
+{
   menu_texture_render(menu, assets->field.textures.background, NULL);
 
-  window_t* field_window = menu_window_get(menu, "field");
+  window_t* window_field = menu_window_get(menu, "field");
 
-  if(!field_window)
+  if(!window_field)
   {
     error_print("Field window diesn't exist");
 
     return;
   }
 
-  minefield_render(field_window, assets, field);
+  minefield_render(window_field, assets, field);
 
   switch(field->state)
   {
@@ -172,28 +250,11 @@ static void menu_field_render(screen_t* screen, assets_t* assets, field_t* field
       break;
   }
 
-  window_t* data_window = menu_window_get(menu, "data");
+  window_t* window_data = menu_window_get(menu, "data");
 
-  if(data_window)
+  if(window_data)
   {
-    // Calculating fps
-    frame_count++;
-
-    end_ticks = SDL_GetTicks();
-
-    if(end_ticks - start_ticks >= 1000)
-    {
-      fps = (float) frame_count / (float) ((end_ticks - start_ticks) / 1000);
-
-      frame_count = 0;
-      start_ticks = end_ticks;
-    }
-
-    char string[32];
-
-    sprintf(string, "%d", fps);
-
-    window_text_render(data_window, string, assets->font, COLOR_WHITE, NULL);
+    menu_field_window_data_render(window_data, assets, field);
   }
 }
 
@@ -202,9 +263,13 @@ static void menu_field_render(screen_t* screen, assets_t* assets, field_t* field
  */
 void game_render(screen_t* screen, assets_t* assets, field_t* field)
 {
-  if(strcmp(screen->menu_name, "field") == 0)
+  menu_t* menu = screen_menu_get(screen, screen->menu_name);
+
+  if(!menu) return;
+
+  if(strcmp(menu->name, "field") == 0)
   {
-    menu_field_render(screen, assets, field);
+    menu_field_render(menu, assets, field);
   }
 
   screen_render(screen);

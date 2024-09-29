@@ -26,3 +26,7 @@ Both screen, menu and window have textures, which is local canvases that everyth
 - screen_t | Screen
 - assets_t | Loaded Textures and Sounds
 - field_t  | Minefield
+
+## Resizing
+
+When resizing a window, the window will set it's size depending on the menu's size. When resizing a child window, the child window will set it's size to it's parent window's size. This allows groups of windows to be indipendently sized and moved around easily.

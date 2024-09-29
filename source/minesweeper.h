@@ -18,6 +18,6 @@ extern void game_render(screen_t* screen, assets_t* assets, field_t* field);
 
 extern void event_handler(screen_t* screen, assets_t* assets, field_t* field, SDL_Event* event);
 
-extern int  screen_resize(screen_t* screen, assets_t* assets, field_t* field, int width, int height);
+extern int  screen_resize(screen_t* screen, field_t* field, int width, int height);
 
 #endif // MINESWEEPER_H

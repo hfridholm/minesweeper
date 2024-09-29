@@ -10,15 +10,15 @@
 
 /*
  * PARAMS
- * - int menuw | Width  of menu field
- * - int menuh | Height of menu field
+ * - int parentw | Width  of menu field
+ * - int parenth | Height of menu field
  */
-static void menu_field_window_field_resize(window_t* window, assets_t* assets, field_t* field, int menuw, int menuh)
+static void menu_field_window_field_resize(window_t* window, field_t* field, int parentw, int parenth)
 {
   SDL_Rect rect = 
   {
-    .w = (float) menuw / 1.1f,
-    .h = (float) menuh / 1.1f
+    .w = (float) parentw / 1.1f,
+    .h = (float) parenth / 1.1f
   };
 
   int squarew = (float) rect.w / (float) field->width;
@@ -31,8 +31,8 @@ static void menu_field_window_field_resize(window_t* window, assets_t* assets, f
   
   window->rect = (SDL_Rect)
   {
-    .x = (float) (menuw - width ) / 2.0f,
-    .y = (float) (menuh - height) / 2.0f,
+    .x = (float) (parentw - width ) / 2.0f,
+    .y = (float) (parenth - height) / 2.0f,
     .w = width,
     .h = height
   };
@@ -43,14 +43,14 @@ static void menu_field_window_field_resize(window_t* window, assets_t* assets, f
 /*
  *
  */
-static void menu_field_window_result_resize(window_t* window, assets_t* assets, field_t* field, int menuw, int menuh)
+static void menu_field_window_result_resize(window_t* window, int parentw, int parenth)
 {
   window->rect = (SDL_Rect)
   {
     .x = 0,
     .y = 0,
-    .w = menuw,
-    .h = menuh
+    .w = parentw,
+    .h = parenth
   };
 
   window_texture_resize(window, window->rect.w, window->rect.h);
@@ -59,63 +59,47 @@ static void menu_field_window_result_resize(window_t* window, assets_t* assets, 
 /*
  *
  */
-static void menu_field_window_data_resize(window_t* window, assets_t* assets, field_t* field, int menuw, int menuh)
-{
-  window->rect = (SDL_Rect)
-  {
-    .x = 0,
-    .y = 0,
-    .w = (float) menuw /  1.0f,
-    .h = (float) menuh / 10.0f
-  };
-
-  window_texture_resize(window, window->rect.w, window->rect.h);
-}
-
-/*
- *
- */
-static void menu_field_resize(menu_t* menu, assets_t* assets, field_t* field, int screenw, int screenh)
+static void menu_field_resize(menu_t* menu, field_t* field, int width, int height)
 {
   window_t* window_field = menu_window_get(menu, "field");
 
   if(window_field)
   {
-    menu_field_window_field_resize(window_field, assets, field, screenw, screenh);
+    menu_field_window_field_resize(window_field, field, width, height);
   }
 
   window_t* window_result = menu_window_get(menu, "result");
 
   if(window_result)
   {
-    menu_field_window_result_resize(window_result, assets, field, screenw, screenh);
+    menu_field_window_result_resize(window_result, width, height);
   }
 
   window_t* window_data = menu_window_get(menu, "data");
 
   if(window_data)
   {
-    menu_field_window_data_resize(window_data, assets, field, screenw, screenh);
+    menu_field_window_data_resize(window_data, width, height);
   }
 }
 
 /*
  *
  */
-static void menu_resize(menu_t* menu, assets_t* assets, field_t* field, int screenw, int screenh)
+static void menu_resize(menu_t* menu, field_t* field, int width, int height)
 {
-  menu_texture_resize(menu, screenw, screenh);
+  menu_texture_resize(menu, width, height);
 
   if(strcmp(menu->name, "field") == 0)
   {
-    menu_field_resize(menu, assets, field, screenw, screenh);
+    menu_field_resize(menu, field, width, height);
   }
 }
 
 /*
  *
  */
-int screen_resize(screen_t* screen, assets_t* assets, field_t* field, int width, int height)
+int screen_resize(screen_t* screen, field_t* field, int width, int height)
 {
   SDL_RenderSetLogicalSize(screen->renderer, width, height);
 
@@ -126,15 +110,15 @@ int screen_resize(screen_t* screen, assets_t* assets, field_t* field, int width,
   {
     menu_t* menu = screen->menus[index];
 
-    menu_resize(menu, assets, field, screen->width, screen->height);
+    menu_resize(menu, field, screen->width, screen->height);
   }
 }
 
 /*
  *
  */
-void event_resize_handler(screen_t* screen, assets_t* assets, field_t* field, SDL_Event* event)
+void event_resize_handler(screen_t* screen, field_t* field, SDL_Event* event)
 {
-  screen_resize(screen, assets, field, event->window.data1, event->window.data2);
+  screen_resize(screen, field, event->window.data1, event->window.data2);
 }
 

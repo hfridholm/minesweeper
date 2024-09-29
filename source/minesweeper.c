@@ -93,8 +93,8 @@ int main(int argc, char* argv[])
     return 1;
   }
 
-  field_t* field = field_create(40, 15, 100, 50);
-  // field_t* field = field_create(10, 8, 15, 10);
+  // field_t* field = field_create(40, 15, 100, 50);
+  field_t* field = field_create(10, 8, 15, 10);
 
   screen_t* screen = screen_create(800, 600, "Minesweeper");
 
@@ -111,14 +111,23 @@ int main(int argc, char* argv[])
   screen->menu_name = menu->name;
 
 
-  menu_window_add(menu, window_create("field", (SDL_Rect) {0, 0, width, height}));
+  menu_window_add(menu, window_create("field", RECT_INIT));
 
-  menu_window_add(menu, window_create("data", (SDL_Rect) {0, 0, width, 40}));
+  window_t* window_data = window_create("data", RECT_INIT);
 
-  menu_window_add(menu, window_create("result", (SDL_Rect) {0, 0, width, height}));
+  menu_window_add(menu, window_data);
+
+  window_child_add(window_data, window_create("fps", RECT_INIT));
+
+  window_child_add(window_data, window_create("swept", RECT_INIT));
+
+  window_child_add(window_data, window_create("flags", RECT_INIT));
 
 
-  screen_resize(screen, assets, field, width, height);
+  menu_window_add(menu, window_create("result", RECT_INIT));
+
+
+  screen_resize(screen, field, width, height);
 
 
   game_routine(screen, assets, field);

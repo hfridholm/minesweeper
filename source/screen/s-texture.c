@@ -145,6 +145,8 @@ int render_target_texture_render(SDL_Renderer* renderer, SDL_Texture* target, SD
  */
 int texture_render(SDL_Renderer* renderer, SDL_Texture* texture, SDL_Rect* rect)
 {
+  if(!texture) return 0;
+
   int status = SDL_RenderCopy(renderer, texture, NULL, rect);
 
   if(status != 0)

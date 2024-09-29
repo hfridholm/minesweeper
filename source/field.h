@@ -53,7 +53,7 @@ typedef struct field_t
 
 extern int square_sweep(field_t* field, square_t* square);
 
-extern int square_flag(square_t* square);
+extern int square_flag(field_t* field, square_t* square);
 
 
 extern void mines_reveal(field_t* field);

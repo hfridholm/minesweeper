@@ -43,11 +43,15 @@ typedef struct window_t
   menu_t*      menu;        // Reference back to menu
 } window_t;
 
+extern const SDL_Rect RECT_INIT;
+
 extern window_t* window_create(char* name, SDL_Rect rect);
 
 extern void      window_destroy(window_t** window);
 
 extern int       window_child_add(window_t* window, window_t* child);
+
+extern window_t* window_child_get(window_t* window, const char* name);
 
 extern int       window_texture_resize(window_t* window, int width, int height);
 
@@ -131,6 +135,13 @@ extern void       chunk_free(Mix_Chunk** chunk);
 extern SDL_Color COLOR_WHITE;
 extern SDL_Color COLOR_GREEN;
 extern SDL_Color COLOR_RED;
+
+typedef enum text_side_t
+{
+  SIDE_LEFT,
+  SIDE_CENTER,
+  SIDE_RIGHT
+} text_side_t;
 
 extern TTF_Font*    font_load(const char* file, int size);
 

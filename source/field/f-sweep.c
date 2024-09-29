@@ -97,17 +97,21 @@ int square_sweep(field_t* field, square_t* square)
  * - 1 | Flagged   square
  * - 2 | Unflagged square
  */
-int square_flag(square_t* square)
+int square_flag(field_t* field, square_t* square)
 {
-  if(square->state == STATE_INTACT)
+  if(square->state == STATE_INTACT && field->flag_amount < field->max_flags)
   {
     square->state = STATE_FLAGGED;
+
+    field->flag_amount++;
 
     return 1;
   }
   else if(square->state == STATE_FLAGGED)
   {
     square->state = STATE_INTACT;
+
+    field->flag_amount--;
 
     return 2;
   }
