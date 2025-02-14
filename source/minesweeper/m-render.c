@@ -162,7 +162,7 @@ static void window_fps_render(window_t* window, assets_t* assets)
 
   sprintf(string, "FPS: %d", fps);
 
-  window_text_render(window, string, assets->font, COLOR_WHITE, NULL, SIDE_LEFT, SIDE_CENTER);
+  window_text_render(window, string, assets->font, COLOR_WHITE, NULL, SIDE_LEFT, SIDE_TOP);
 }
 
 /*
@@ -176,7 +176,7 @@ static void window_swept_render(window_t* window, assets_t* assets, field_t* fie
 
   sprintf(string, "SWEPT: %03d/%03d", field->swept_amount, square_count - field->mine_amount);
 
-  window_text_render(window, string, assets->font, COLOR_WHITE, NULL, SIDE_LEFT, SIDE_CENTER);
+  window_text_render(window, string, assets->font, COLOR_WHITE, NULL, SIDE_LEFT, SIDE_BOTTOM);
 }
 
 /*

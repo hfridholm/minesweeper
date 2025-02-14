@@ -51,8 +51,8 @@ static void menu_field_window_field_resize(window_t* window, field_t* field, int
   
   window->rect = (SDL_Rect)
   {
-    .x = rect.x + ((float) (rect.w - width ) / 2.0f),
-    .y = rect.y + ((float) (rect.h - height) / 2.0f),
+    .x = rect.x + ((float) (rect.w - width ) / 2.f),
+    .y = rect.y + ((float) (rect.h - height) / 2.f),
     .w = width,
     .h = height
   };

@@ -52,8 +52,10 @@ extern SDL_Color COLOR_RED;
 typedef enum
 {
   SIDE_LEFT   = 0,
+  SIDE_TOP    = 0,
   SIDE_CENTER = 1,
-  SIDE_RIGHT  = 2
+  SIDE_RIGHT  = 2,
+  SIDE_BOTTOM = 2
 } side_t;
 
 extern TTF_Font*    font_load(const char* file, int size);

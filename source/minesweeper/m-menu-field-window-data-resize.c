@@ -13,15 +13,15 @@
  */
 static void window_fps_resize(window_t* window, int parentw, int parenth)
 {
-  int width  = (float) parentw / 1.0f;
-  int height = (float) parenth / 3.0f;
+  int w = parentw;
+  int h = (float) parenth / 3.f;
 
   window->rect = (SDL_Rect)
   {
     .x = 0,
-    .y = height * 2,
-    .w = width,
-    .h = height
+    .y = h * 2,
+    .w = w,
+    .h = h
   };
 
   window_texture_resize(window, window->rect.w, window->rect.h);
@@ -32,15 +32,15 @@ static void window_fps_resize(window_t* window, int parentw, int parenth)
  */
 static void window_swept_resize(window_t* window, int parentw, int parenth)
 {
-  int width  = (float) parentw / 1.0f;
-  int height = (float) parenth / 3.0f;
+  int w = parentw;
+  int h = (float) parenth / 3.f;
 
   window->rect = (SDL_Rect)
   {
     .x = 0,
     .y = 0,
-    .w = width,
-    .h = height
+    .w = w,
+    .h = h
   };
 
   window_texture_resize(window, window->rect.w, window->rect.h);
@@ -51,15 +51,15 @@ static void window_swept_resize(window_t* window, int parentw, int parenth)
  */
 static void window_flags_resize(window_t* window, int parentw, int parenth)
 {
-  int width  = (float) parentw / 1.0f;
-  int height = (float) parenth / 3.0f;
+  int w = parentw;
+  int h = (float) parenth / 3.f;
 
   window->rect = (SDL_Rect)
   {
     .x = 0,
-    .y = height,
-    .w = width,
-    .h = height
+    .y = h,
+    .w = w,
+    .h = h
   };
 
   window_texture_resize(window, window->rect.w, window->rect.h);
