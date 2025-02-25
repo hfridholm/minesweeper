@@ -8,6 +8,9 @@
 
 #include "minesweeper.h"
 
+#define DEBUG_IMPLEMENT
+#include "debug.h"
+
 #define FPS 10
 
 /*

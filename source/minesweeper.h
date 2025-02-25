@@ -9,7 +9,6 @@
 
 #include <stdbool.h>
 
-#include "debug.h"
 #include "screen.h"
 #include "assets.h"
 #include "field.h"
